@@ -56,6 +56,12 @@ public class FrmRegisterUser extends JDialog implements ActionListener {
         workPane.add(edtCity);
         this.getContentPane().add(workPane, BorderLayout.CENTER);
         this.setSize(230, 450);
+        double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+        double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+        this.setLocation((int) (width - this.getWidth()) / 2,
+                (int) (height - this.getHeight()) / 2);
+
+        this.validate();
         this.btnCancel.addActionListener(this);
         this.btnOk.addActionListener(this);
     }

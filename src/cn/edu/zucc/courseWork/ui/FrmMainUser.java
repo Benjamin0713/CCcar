@@ -12,16 +12,17 @@ public class FrmMainUser extends JFrame implements ActionListener {
     private static final long serialVersionUID = 1L;
     private JMenuBar menubar=new JMenuBar(); ;
     private JMenu menu_person=new JMenu("个人信息");
-    private JMenu menu_coupon=new JMenu("优惠信息");
+    private JMenu menu_coupon=new JMenu("优惠券");
+    private JMenu menu_pro = new JMenu("限时促销");
     private JMenu menu_order=new JMenu("CC下单");
     private JMenu menu_more =new JMenu("更多");
 
     private JMenuItem menuItem_Check = new JMenuItem("查看信息");
-    private JMenuItem menuItem_Modify = new JMenuItem("修改信息");
-    private JMenuItem menuItem_Logout = new JMenuItem("注销账号");
+//    private JMenuItem menuItem_Modify = new JMenuItem("修改信息");
+//    private JMenuItem menuItem_Logout = new JMenuItem("注销账号");
     private JMenuItem menuItem_coupon = new JMenuItem("优惠券信息");
-    private JMenuItem menuItem_promote = new JMenuItem("限时促销");
-    private JMenuItem menuItem_take = new JMenuItem("领取");
+    private JMenuItem menuItem_promote = new JMenuItem("限时促销信息");
+//    private JMenuItem menuItem_take = new JMenuItem("领取");
     private JMenuItem menuItem_checkcar = new JMenuItem("查看汽车信息");
     private JMenuItem menuItem_order = new JMenuItem("选择下单");
     private JMenuItem menuItem_modifyorder = new JMenuItem("修改订单");
@@ -38,11 +39,11 @@ public class FrmMainUser extends JFrame implements ActionListener {
         this.setTitle("CC租车系统-用户");
 
         this.menu_person.add(menuItem_Check);this.menuItem_Check.addActionListener(this);
-        this.menu_person.add(menuItem_Modify);this.menuItem_Modify.addActionListener(this);
-        this.menu_person.add(menuItem_Logout);this.menuItem_Logout.addActionListener(this);
+//        this.menu_person.add(menuItem_Modify);this.menuItem_Modify.addActionListener(this);
+//        this.menu_person.add(menuItem_Logout);this.menuItem_Logout.addActionListener(this);
         this.menu_coupon.add(menuItem_coupon);this.menuItem_coupon.addActionListener(this);
-        this.menu_coupon.add(menuItem_promote);this.menuItem_promote.addActionListener(this);
-        this.menu_coupon.add(menuItem_take);this.menuItem_take.addActionListener(this);
+        this.menu_pro.add(menuItem_promote);this.menuItem_promote.addActionListener(this);
+//        this.menu_coupon.add(menuItem_take);this.menuItem_take.addActionListener(this);
         this.menu_order.add(menuItem_checkcar);this.menuItem_checkcar.addActionListener(this);
         this.menu_order.add(menuItem_order);this.menuItem_order.addActionListener(this);
         this.menu_order.add(menuItem_modifyorder);this.menuItem_modifyorder.addActionListener(this);
@@ -54,6 +55,7 @@ public class FrmMainUser extends JFrame implements ActionListener {
 
         menubar.add(menu_person);
         menubar.add(menu_coupon);
+        menubar.add(menu_pro);
         menubar.add(menu_order);
         menubar.add(menu_more);
         this.setJMenuBar(menubar);
@@ -61,7 +63,7 @@ public class FrmMainUser extends JFrame implements ActionListener {
 
         CCUser user = new CCUser();
         user = CCUser.currentLoginUser;
-        JLabel label=new JLabel("您好!   "+user.getUser_name());//修改成   您好！+骑手名字
+        JLabel label=new JLabel("您好!   "+user.getUser_name());//修改成   您好！+用户名
         statusBar.add(label);
         this.getContentPane().add(statusBar,BorderLayout.SOUTH);
         this.addWindowListener(new WindowAdapter(){
@@ -74,6 +76,19 @@ public class FrmMainUser extends JFrame implements ActionListener {
     }
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        if (e.getSource() == this.menuItem_Cancel) {
+            setVisible(false);
+            return;
+        }else if(e.getSource()==this.menuItem_Check){
+            new FrmUserInforCheck().setVisible(true);
+        }else if(e.getSource()==this.menuItem_coupon){
+            new FrmCouponuser().setVisible(true);
+        }else if(e.getSource()==this.menuItem_promote){
+            new FrmProUser().setVisible(true);
+        }else if(e.getSource()==this.menuItem_coupon_taken){
+            new FrmUserGetCou().setVisible(true);
+        }else if(e.getSource()==this.menuItem_promote_taken){
+            new FrmUserGetPro().setVisible(true);
+        }
     }
 }

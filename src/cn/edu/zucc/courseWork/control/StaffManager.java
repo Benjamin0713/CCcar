@@ -81,6 +81,8 @@ public class StaffManager implements IStaffManager {
                 throw new BusinessException("工作人员不存在");
             }
             if(!pwd.equals(rs.getString(4))) throw new BusinessException("密码错误");
+            if(rs.getInt(2)==0) throw new BusinessException("没有登录权限");
+//            System.out.println(rs.getInt(2));
             rs.close();
             pst.close();
 //            rs.close();
@@ -152,7 +154,46 @@ public class StaffManager implements IStaffManager {
             }
         }
     }
-    public List<CCStaff> loadAllshop() throws BaseException{//用户界面商家
+    public void changeName(CCStaff staff, String oldName, String newName) throws BaseException{
+        if(!oldName.equals(staff.getStaff_name())) throw new BusinessException("原用户名输入错误");
+        if(oldName.equals(newName)) throw new BusinessException("新用户名不能与原用户一致");
+        Connection conn=null;
+        try {
+            conn = DBUtil.getConnection();
+            String sql = "select * from staff where pwd=?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1,staff.getStaff_pwd());
+            ResultSet rs = pst.executeQuery();
+            if(!rs.next()){
+                rs.close();
+                pst.close();
+                throw new BusinessException("登录员工不存在");
+            }
+            int staff_id=rs.getInt(1);
+            rs.close();
+            pst.close();
+            sql = "update staff set name=? where pwd=? and staff_id = ?";
+            pst = conn.prepareStatement(sql);
+            pst.setString(1,newName);
+            pst.setString(2,staff.getStaff_pwd());
+            pst.setInt(3,staff_id);
+            pst.execute();
+            pst.close();
+//            staff.setStaff_pwd(staff.getStaff_pwd());
+//            staff.setStaff_name(newName);
+        }catch (SQLException e){
+            throw new DbException(e);
+        }finally {
+            if(conn!=null){
+                try{
+                    conn.close();
+                }catch (SQLException ex){
+                    ex.printStackTrace();
+                }
+            }
+        }
+    }
+    public List<CCStaff> loadAllshop() throws BaseException{
         List<CCStaff> result = new ArrayList<CCStaff>();
         Connection conn =null;
         try {

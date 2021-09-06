@@ -3,6 +3,7 @@ package cn.edu.zucc.courseWork.control;
 import cn.edu.zucc.courseWork.itf.IAdminManager;
 import cn.edu.zucc.courseWork.model.CCAdmin;
 import cn.edu.zucc.courseWork.model.CCStaff;
+import cn.edu.zucc.courseWork.model.CCUser;
 import cn.edu.zucc.courseWork.util.BaseException;
 import cn.edu.zucc.courseWork.util.BusinessException;
 import cn.edu.zucc.courseWork.util.DBUtil;
@@ -12,6 +13,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AdminManager implements IAdminManager {
     public CCAdmin reg(String staff_id,String staffname, String pwd, String pwd2) throws BaseException {
@@ -145,5 +148,77 @@ public class AdminManager implements IAdminManager {
                     }
                 }
             }
+    }
+    public void changeName(CCAdmin admin, String oldName, String newName) throws BaseException{
+        if(!oldName.equals(admin.getStaff_name())) throw new BusinessException("原用户名输入错误");
+        if(oldName.equals(newName)) throw new BusinessException("新用户名不能与原用户一致");
+        Connection conn=null;
+        try {
+            conn = DBUtil.getConnection();
+            String sql = "select * from admin where pwd=?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1,admin.getStaff_pwd());
+            ResultSet rs = pst.executeQuery();
+            if(!rs.next()){
+                rs.close();
+                pst.close();
+                throw new BusinessException("登录管理员不存在");
+            }
+            int staff_id=rs.getInt(1);
+            rs.close();
+            pst.close();
+            sql = "update admin set name=? where pwd=? and staff_id = ?";
+            pst = conn.prepareStatement(sql);
+            pst.setString(1,newName);
+            pst.setString(2,admin.getStaff_pwd());
+            pst.setInt(3,staff_id);
+            pst.execute();
+            pst.close();
+//            staff.setStaff_pwd(staff.getStaff_pwd());
+//            staff.setStaff_name(newName);
+        }catch (SQLException e){
+            throw new DbException(e);
+        }finally {
+            if(conn!=null){
+                try{
+                    conn.close();
+                }catch (SQLException ex){
+                    ex.printStackTrace();
+                }
+            }
+        }
+    }
+    public List<CCAdmin> loadAllshop() throws BaseException{
+        List<CCAdmin> result = new ArrayList<CCAdmin>();
+        Connection conn =null;
+        try {
+            conn = DBUtil.getConnection();
+            String sql = "select * from admin where name = ?";
+            java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+            pst.setString(1,CCAdmin.currentLoginAdmin.getStaff_name());
+            java.sql.ResultSet rs=pst.executeQuery();
+            while(rs.next()) {
+                CCAdmin admin=new CCAdmin();
+                admin.setStaff_id(rs.getInt(1));
+                admin.setStaff_name(rs.getString(2));
+                admin.setStaff_pwd(rs.getString(3));
+                result.add(admin);
+            }
+            rs.close();
+            pst.close();
+        }catch (SQLException e) {
+            e.printStackTrace();
+            throw new DbException(e);
+        }
+        finally{
+            if(conn!=null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+        }
+        return result;
     }
 }

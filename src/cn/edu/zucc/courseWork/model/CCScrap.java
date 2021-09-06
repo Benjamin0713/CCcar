@@ -5,7 +5,18 @@ import java.util.Date;
 public class CCScrap {
 //    汽车报废
     public CCScrap(){}
-
+    public String getCell(int col) {
+        if (col==0) return String.valueOf(car_id);
+        else if (col==1) return String.valueOf(staff_id);
+        else if (col==2) return String.valueOf(Scrap_id);
+        else if (col==3) return String.valueOf(Scrap_time);
+        else if (col==4) return Scrap_content;
+        else return "";
+    }
+    public static final String[] tableTitles = {"汽车编号","员工编号","报废编号","报废时间","内容"};
+    public static String[] getTabletitles() {
+        return tableTitles;
+    }
     private int car_id;
     private int staff_id;
     private int Scrap_id;
