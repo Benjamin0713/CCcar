@@ -14,4 +14,6 @@ public interface IUserManager {
                           String newPwd2) throws BaseException;
     public void changeName(CCUser user, String oldName, String newName) throws BaseException;
     public List<CCUser> loadAllshop() throws BaseException;
+    public List<CCUser> loadAll() throws BaseException;
+    public List<CCUser> loadCost() throws BaseException;
 }

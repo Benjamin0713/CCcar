@@ -98,5 +98,6 @@ public class FrmUserInforCheck extends JFrame implements ActionListener {
             FrmModifyUsername dlg =new FrmModifyUsername(null, "修改用户名", true);
             dlg.setVisible(true);
         }
+        this.reloadStaffTable();
     }
 }

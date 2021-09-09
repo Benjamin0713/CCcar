@@ -6,7 +6,16 @@ public class CCType {
     private int Type_id;
     private String Type_name;
     private String Type_descr;
-
+    public String getCell(int col) {
+        if (col==0) return String.valueOf(Type_id);
+        else if (col==1) return Type_name;
+        else if (col==2) return Type_descr;
+        else return "";
+    }
+    public static final String[] tableTitles = {"类别编号","类别名称","类别描述"};
+    public static String[] getTabletitles() {
+        return tableTitles;
+    }
     public int getType_id() {
         return Type_id;
     }

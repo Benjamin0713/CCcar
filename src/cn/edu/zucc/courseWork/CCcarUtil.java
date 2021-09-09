@@ -14,4 +14,6 @@ public class CCcarUtil {
     public static ICarManager carManager=new CarManager();
     public static ICarModelManager carModelManager=new CarModelManager();
     public static IScrapManager scrapManager=new ScrapManager();
+    public static IAllocateManager allocateManager=new AllocateManager();
+    public static IOrderManager orderManager=new OrderManager();
 }

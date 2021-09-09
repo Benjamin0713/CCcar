@@ -91,6 +91,7 @@ public class UserManager implements IUserManager {
 //                pst.close();
                 throw new BusinessException("用户不存在");
             }
+            int user_id=rs.getInt(1);
             if(!pwd.equals(rs.getString(4))) throw new BusinessException("密码错误");
             rs.close();
             pst.close();
@@ -106,6 +107,7 @@ public class UserManager implements IUserManager {
 //                throw new BusinessException("密码错误");
 //            }
             CCUser user = new CCUser();
+            user.setUser_id(user_id);
             user.setUser_pwd(pwd);
             user.setUser_name(name);
             return user;
@@ -219,6 +221,76 @@ public class UserManager implements IUserManager {
                 user.setUser_email(rs.getString(6));
                 user.setUser_city(rs.getString(7));
                 user.setUser_register_time(rs.getTimestamp(8));
+                result.add(user);
+            }
+            rs.close();
+            pst.close();
+        }catch (SQLException e) {
+            e.printStackTrace();
+            throw new DbException(e);
+        }
+        finally{
+            if(conn!=null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+        }
+        return result;
+    }
+    public List<CCUser> loadAll() throws BaseException{
+        List<CCUser> result = new ArrayList<CCUser>();
+        Connection conn =null;
+        try {
+            conn = DBUtil.getConnection();
+            String sql = "select * from user ";
+            java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+            java.sql.ResultSet rs=pst.executeQuery();
+            while(rs.next()) {
+                CCUser user = new CCUser();
+                user.setUser_id(rs.getInt(1));
+                user.setUser_name(rs.getString(2));
+                user.setUser_sex(rs.getString(3));
+//                user.setUser_pwd(rs.getString(4));
+                user.setUser_tell_num(rs.getString(5));
+                user.setUser_email(rs.getString(6));
+                user.setUser_city(rs.getString(7));
+                user.setUser_register_time(rs.getTimestamp(8));
+                result.add(user);
+            }
+            rs.close();
+            pst.close();
+        }catch (SQLException e) {
+            e.printStackTrace();
+            throw new DbException(e);
+        }
+        finally{
+            if(conn!=null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+        }
+        return result;
+    }
+    public List<CCUser> loadCost() throws BaseException{
+        List<CCUser> result = new ArrayList<CCUser>();
+        Connection conn =null;
+        try {
+            conn = DBUtil.getConnection();
+            String sql = "select * from usercost ";
+            java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+            java.sql.ResultSet rs=pst.executeQuery();
+            while(rs.next()) {
+                CCUser user = new CCUser();
+                user.setUser_id(rs.getInt(1));
+                user.setUser_name(rs.getString(2));
+                user.setTotal_order(rs.getInt(3));
+                user.setTotal_cost(rs.getFloat(4));
                 result.add(user);
             }
             rs.close();

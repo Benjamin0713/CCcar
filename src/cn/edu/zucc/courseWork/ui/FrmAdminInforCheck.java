@@ -39,9 +39,9 @@ public class FrmAdminInforCheck extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(null, e.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
             return;
         }
-        tblAdminData = new Object[Admindata.size()][CCStaff.tableTitles.length];
+        tblAdminData = new Object[Admindata.size()][CCAdmin.tableTitles.length];
         for(int i = 0;i < Admindata.size() ; i++)
-            for(int j = 0;j<CCStaff.tableTitles.length;j++)
+            for(int j = 0;j<CCAdmin.tableTitles.length;j++)
                 tblAdminData[i][j] = Admindata.get(i).getCell(j);
         tabAdminModel.setDataVector(tblAdminData, tblAdminTitle);
         this.dataTableAdmin.validate();
@@ -73,11 +73,6 @@ public class FrmAdminInforCheck extends JFrame implements ActionListener {
         JLabel label=new JLabel("您好!"+admin.getStaff_name());//修改成   您好！+登陆用户名
         statusBar.add(label);
         this.getContentPane().add(statusBar, BorderLayout.SOUTH);
-//        this.addWindowListener(new WindowAdapter(){
-//            public void windowClosing(WindowEvent e){
-//               System.exit(0);
-//            }
-//        });
         this.setVisible(true);
     }
     @Override
@@ -92,5 +87,6 @@ public class FrmAdminInforCheck extends JFrame implements ActionListener {
             FrmModifyAdminname dlg =new FrmModifyAdminname(null, "修改用户名", true);
             dlg.setVisible(true);
         }
+        this.reloadStaffTable();
     }
 }

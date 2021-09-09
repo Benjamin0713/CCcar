@@ -43,9 +43,9 @@ public class FrmCouponstaff extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(null, e.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
             return;
         }
-        tblCouponData = new Object[Coupondata.size()][CCUser.tableTitles.length];
+        tblCouponData = new Object[Coupondata.size()][CCCoupon.tableTitles.length];
         for(int i = 0;i < Coupondata.size() ; i++)
-            for(int j = 0; j< CCScrap.tableTitles.length; j++)
+            for(int j = 0; j< CCCoupon.tableTitles.length; j++)
                 tblCouponData[i][j] = Coupondata.get(i).getCell(j);
         tabCouponModel.setDataVector(tblCouponData, tblCouponTitle);
         this.dataTableCoupon.validate();
@@ -84,6 +84,10 @@ public class FrmCouponstaff extends JFrame implements ActionListener {
         if(e.getSource() == this.menuItem_Cancel) {
             setVisible(false);
             return;
+        }else if(e.getSource()==this.menuItem_couponadd){
+            FrmAddCoupon dlg =new FrmAddCoupon(null, "添加优惠券", true);
+            dlg.setVisible(true);
         }
+        this.reloadCouponTable();
     }
 }

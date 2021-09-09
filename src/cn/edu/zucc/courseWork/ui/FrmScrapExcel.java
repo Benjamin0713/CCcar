@@ -35,7 +35,7 @@ public class FrmScrapExcel extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(null, e.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
             return;
         }
-        tblScrapData = new Object[Scrapdata.size()][CCUser.tableTitles.length];
+        tblScrapData = new Object[Scrapdata.size()][CCScrap.tableTitles.length];
         for(int i = 0;i < Scrapdata.size() ; i++)
             for(int j = 0;j<CCScrap.tableTitles.length;j++)
                 tblScrapData[i][j] = Scrapdata.get(i).getCell(j);
@@ -66,5 +66,6 @@ public class FrmScrapExcel extends JFrame implements ActionListener {
             setVisible(false);
             return;
         }
+        this.reloadScrapTable();
     }
 }

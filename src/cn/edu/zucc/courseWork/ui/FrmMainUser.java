@@ -18,16 +18,11 @@ public class FrmMainUser extends JFrame implements ActionListener {
     private JMenu menu_more =new JMenu("更多");
 
     private JMenuItem menuItem_Check = new JMenuItem("查看信息");
-//    private JMenuItem menuItem_Modify = new JMenuItem("修改信息");
-//    private JMenuItem menuItem_Logout = new JMenuItem("注销账号");
     private JMenuItem menuItem_coupon = new JMenuItem("优惠券信息");
     private JMenuItem menuItem_promote = new JMenuItem("限时促销信息");
-//    private JMenuItem menuItem_take = new JMenuItem("领取");
     private JMenuItem menuItem_checkcar = new JMenuItem("查看汽车信息");
-    private JMenuItem menuItem_order = new JMenuItem("选择下单");
-    private JMenuItem menuItem_modifyorder = new JMenuItem("修改订单");
-    private JMenuItem menuItem_confirm = new JMenuItem("确认订单");
     private JMenuItem menuItem_checkorder = new JMenuItem("查看订单");
+    private JMenuItem menuItem_orderhis=new JMenuItem("历史订单");
     private JMenuItem menuItem_coupon_taken = new JMenuItem("查看已领取的优惠券");
     private JMenuItem menuItem_promote_taken = new JMenuItem("查看获得的折扣");
     private JMenuItem  menuItem_Cancel = new JMenuItem ("退出");
@@ -39,16 +34,11 @@ public class FrmMainUser extends JFrame implements ActionListener {
         this.setTitle("CC租车系统-用户");
 
         this.menu_person.add(menuItem_Check);this.menuItem_Check.addActionListener(this);
-//        this.menu_person.add(menuItem_Modify);this.menuItem_Modify.addActionListener(this);
-//        this.menu_person.add(menuItem_Logout);this.menuItem_Logout.addActionListener(this);
         this.menu_coupon.add(menuItem_coupon);this.menuItem_coupon.addActionListener(this);
         this.menu_pro.add(menuItem_promote);this.menuItem_promote.addActionListener(this);
-//        this.menu_coupon.add(menuItem_take);this.menuItem_take.addActionListener(this);
         this.menu_order.add(menuItem_checkcar);this.menuItem_checkcar.addActionListener(this);
-        this.menu_order.add(menuItem_order);this.menuItem_order.addActionListener(this);
-        this.menu_order.add(menuItem_modifyorder);this.menuItem_modifyorder.addActionListener(this);
-        this.menu_order.add(menuItem_confirm);this.menuItem_confirm.addActionListener(this);
         this.menu_order.add(menuItem_checkorder);this.menuItem_checkorder.addActionListener(this);
+        this.menu_order.add(menuItem_orderhis);this.menuItem_orderhis.addActionListener(this);
         this.menu_more.add(menuItem_coupon_taken);this.menuItem_coupon_taken.addActionListener(this);
         this.menu_more.add(menuItem_promote_taken);this.menuItem_promote_taken.addActionListener(this);
         this.menu_more.add(menuItem_Cancel);this.menuItem_Cancel.addActionListener(this);
@@ -89,6 +79,12 @@ public class FrmMainUser extends JFrame implements ActionListener {
             new FrmUserGetCou().setVisible(true);
         }else if(e.getSource()==this.menuItem_promote_taken){
             new FrmUserGetPro().setVisible(true);
+        }else if(e.getSource()==this.menuItem_checkcar){
+            new FrmUserCarOrder().setVisible(true);
+        }else if(e.getSource()==this.menuItem_checkorder){
+            new FrmUserOrderCheck().setVisible(true);
+        }else if(e.getSource()==this.menuItem_orderhis){
+            new FrmCheckOverList().setVisible(true);
         }
     }
 }

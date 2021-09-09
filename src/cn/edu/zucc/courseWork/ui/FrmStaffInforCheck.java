@@ -96,5 +96,6 @@ public class FrmStaffInforCheck extends JFrame implements ActionListener {
             FrmModifyStaffname dlg =new FrmModifyStaffname(null, "修改用户名", true);
             dlg.setVisible(true);
         }
+        this.reloadStaffTable();
     }
 }
