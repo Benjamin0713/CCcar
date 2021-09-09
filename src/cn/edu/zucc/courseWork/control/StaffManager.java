@@ -81,6 +81,10 @@ public class StaffManager implements IStaffManager {
                 throw new BusinessException("工作人员不存在");
             }
             if(!pwd.equals(rs.getString(4))) throw new BusinessException("密码错误");
+            if(rs.getInt(2)==0) throw new BusinessException("没有登录权限");
+            int Net_id=rs.getInt(2);
+//            System.out.println(rs.getInt(2));
+            int staff_id=rs.getInt(1);
             rs.close();
             pst.close();
 //            rs.close();
@@ -95,6 +99,8 @@ public class StaffManager implements IStaffManager {
 //                throw new BusinessException("密码错误");
 //            }
             CCStaff staff = new CCStaff();
+            staff.setStaff_id(staff_id);
+            staff.setStaff_Net_id(Net_id);
             staff.setStaff_pwd(pwd);
             staff.setStaff_name(name);
             return staff;
@@ -152,7 +158,46 @@ public class StaffManager implements IStaffManager {
             }
         }
     }
-    public List<CCStaff> loadAllshop() throws BaseException{//用户界面商家
+    public void changeName(CCStaff staff, String oldName, String newName) throws BaseException{
+        if(!oldName.equals(staff.getStaff_name())) throw new BusinessException("原用户名输入错误");
+        if(oldName.equals(newName)) throw new BusinessException("新用户名不能与原用户一致");
+        Connection conn=null;
+        try {
+            conn = DBUtil.getConnection();
+            String sql = "select * from staff where pwd=?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1,staff.getStaff_pwd());
+            ResultSet rs = pst.executeQuery();
+            if(!rs.next()){
+                rs.close();
+                pst.close();
+                throw new BusinessException("登录员工不存在");
+            }
+            int staff_id=rs.getInt(1);
+            rs.close();
+            pst.close();
+            sql = "update staff set name=? where pwd=? and staff_id = ?";
+            pst = conn.prepareStatement(sql);
+            pst.setString(1,newName);
+            pst.setString(2,staff.getStaff_pwd());
+            pst.setInt(3,staff_id);
+            pst.execute();
+            pst.close();
+//            staff.setStaff_pwd(staff.getStaff_pwd());
+//            staff.setStaff_name(newName);
+        }catch (SQLException e){
+            throw new DbException(e);
+        }finally {
+            if(conn!=null){
+                try{
+                    conn.close();
+                }catch (SQLException ex){
+                    ex.printStackTrace();
+                }
+            }
+        }
+    }
+    public List<CCStaff> loadAllshop() throws BaseException{
         List<CCStaff> result = new ArrayList<CCStaff>();
         Connection conn =null;
         try {
@@ -160,6 +205,41 @@ public class StaffManager implements IStaffManager {
             String sql = "select * from staff where name = ?";
             java.sql.PreparedStatement pst=conn.prepareStatement(sql);
             pst.setString(1,CCStaff.currentLoginStaff.getStaff_name());
+            java.sql.ResultSet rs=pst.executeQuery();
+            while(rs.next()) {
+                CCStaff s = new CCStaff();
+                s.setStaff_id(rs.getInt(1));
+                s.setStaff_Net_id(rs.getInt(2));
+                s.setStaff_name(rs.getString(3));
+                s.setStaff_pwd(rs.getString(4));
+                result.add(s);
+            }
+            rs.close();
+            pst.close();
+        }catch (SQLException e) {
+            e.printStackTrace();
+            throw new DbException(e);
+        }
+        finally{
+            if(conn!=null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+        }
+        return result;
+    }
+    public List<CCStaff> loadAll() throws BaseException{
+        List<CCStaff> result = new ArrayList<CCStaff>();
+        Connection conn =null;
+        try {
+            conn = DBUtil.getConnection();
+            String sql = "SELECT *\n" +
+                    "FROM staff\n" +
+                    "where Net_id is not NULL";
+            java.sql.PreparedStatement pst=conn.prepareStatement(sql);
             java.sql.ResultSet rs=pst.executeQuery();
             while(rs.next()) {
                 CCStaff s = new CCStaff();

@@ -14,11 +14,28 @@ public class CCOrder {
     private Date Pick_time;
     private int Return_Net_id;
     private Date Return_time;
-    private Date Pick_total_time;
+    private int Pick_total_time;
     private float Ori_amount;
     private float Set_amount;
     private String Order_state;
-
+    public String getCell(int col) {
+        if (col==0) return String.valueOf(Order_id);
+        else if (col==1) return String.valueOf(Order_car_id);
+        else if (col==2) return String.valueOf(Pick_Net_id);
+        else if (col==3) return String.valueOf(Pick_time);
+        else if (col==4) return String.valueOf(Return_Net_id);
+        else if (col==5) return String.valueOf(Return_time);
+        else if (col==6) return String.valueOf(Pick_total_time);
+        else if(col==7) return String.valueOf(Set_amount);
+        else if (col==8) return String.valueOf(Order_coupon_id);
+        else if (col==9) return String.valueOf(Order_promotion_id);
+        else if(col==10) return Order_state;
+        else return "";
+    }
+    public static final String[] tableTitles = {"序号","汽车编号","借车网点","借车时间","还车网点","还车时间","租车时长","支付金额","使用优惠券","使用折扣","订单状态"};
+    public static String[] getTabletitles() {
+        return tableTitles;
+    }
     public int getOrder_user_id() {
         return Order_user_id;
     }
@@ -91,11 +108,11 @@ public class CCOrder {
         Return_time = return_time;
     }
 
-    public Date getPick_total_time() {
+    public int getPick_total_time() {
         return Pick_total_time;
     }
 
-    public void setPick_total_time(Date pick_total_time) {
+    public void setPick_total_time(int pick_total_time) {
         Pick_total_time = pick_total_time;
     }
 

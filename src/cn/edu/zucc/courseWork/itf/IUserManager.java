@@ -3,6 +3,8 @@ package cn.edu.zucc.courseWork.itf;
 import cn.edu.zucc.courseWork.model.CCUser;
 import cn.edu.zucc.courseWork.util.BaseException;
 
+import java.util.List;
+
 public interface IUserManager {
     public CCUser login(String name, String pwd) throws BaseException;
 
@@ -10,4 +12,8 @@ public interface IUserManager {
 
     public void changePwd(CCUser user, String oldPwd, String newPwd,
                           String newPwd2) throws BaseException;
+    public void changeName(CCUser user, String oldName, String newName) throws BaseException;
+    public List<CCUser> loadAllshop() throws BaseException;
+    public List<CCUser> loadAll() throws BaseException;
+    public List<CCUser> loadCost() throws BaseException;
 }

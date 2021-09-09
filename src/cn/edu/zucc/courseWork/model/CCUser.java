@@ -21,6 +21,18 @@ public class CCUser {
     public static String[] getTabletitles() {
         return tableTitles;
     }
+
+    public String getOrder(int col) {
+        if (col==0) return String.valueOf(user_id);
+        else if (col==1) return User_name;
+        else if (col==2) return String.valueOf(Total_order);
+        else if (col==3) return String.valueOf(Total_cost);
+        else return "";
+    }
+    public static final String[] CostTitles = {"用户编号","用户名","总订单数","总消费"};
+    public static String[] getCosttitles() {
+        return CostTitles;
+    }
     public static CCUser getCurrentLoginUser() {
         return currentLoginUser;
     }
@@ -35,6 +47,8 @@ public class CCUser {
     private String User_email;
     private String User_city;
     private Date User_register_time;
+    private int Total_order;
+    private float Total_cost;
 
     public int getUser_id() {
         return user_id;
@@ -99,5 +113,21 @@ public class CCUser {
 
     public void setUser_register_time(Date user_register_time) {
         User_register_time = user_register_time;
+    }
+
+    public int getTotal_order() {
+        return Total_order;
+    }
+
+    public void setTotal_order(int total_order) {
+        Total_order = total_order;
+    }
+
+    public float getTotal_cost() {
+        return Total_cost;
+    }
+
+    public void setTotal_cost(float total_cost) {
+        Total_cost = total_cost;
     }
 }

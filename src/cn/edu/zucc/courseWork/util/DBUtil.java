@@ -3,7 +3,7 @@ package cn.edu.zucc.courseWork.util;
 import java.sql.Connection;
 
 public class DBUtil {
-    private static final String jdbcUrl="jdbc:mysql://localhost:3306/cc";
+    private static final String jdbcUrl="jdbc:mysql://localhost:3306/cc?useUnicode=true&characterEncoding=UTF-8";
     private static final String dbUser="root";
     private static final String dbPwd="123";
     static{

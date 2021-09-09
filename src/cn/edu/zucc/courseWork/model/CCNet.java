@@ -7,7 +7,18 @@ public class CCNet {
     private String Net_address;
     private String Net_tellphone;
     private int Net_count;
-
+    public String getCell(int col) {
+        if (col==0) return String.valueOf(Net_id);
+        else if (col==1) return Net_name;
+        else if (col==2) return Net_city;
+        else if (col==3) return Net_address;
+        else if (col==4) return Net_tellphone;
+        else return "";
+    }
+    public static final String[] tableTitles = {"网点编号","网点名称","所在城市","地址","联系电话"};
+    public static String[] getTabletitles() {
+        return tableTitles;
+    }
     public CCNet(){
     }
 

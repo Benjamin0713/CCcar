@@ -13,4 +13,6 @@ public interface IStaffManager {
     public void changePwd(CCStaff staff, String oldPwd, String newPwd,
                           String newPwd2) throws BaseException;
     public List<CCStaff> loadAllshop() throws BaseException;
+    public void changeName(CCStaff staff, String oldName, String newName) throws BaseException;
+    public List<CCStaff> loadAll() throws BaseException;
 }

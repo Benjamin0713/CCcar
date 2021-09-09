@@ -4,7 +4,20 @@ import java.util.Date;
 
 public class CCPromotion {
     public CCPromotion(){}
-
+    public String getCell(int col) {
+        if (col==0) return String.valueOf(Promotion_id);
+        else if (col==1) return String.valueOf(Promotion_Net_id);
+        else if (col==2) return String.valueOf(Promotion_model_id);
+        else if (col==3) return String.valueOf(discount);
+        else if (col==4) return String.valueOf(number);
+        else if(col==5) return String.valueOf(begin_date);
+        else if(col==6) return String.valueOf(finish_date);
+        else return "";
+    }
+    public static final String[] tableTitles = {"促销编号","促销网点","促销车型","促销折扣","促销数量","开始时间","结束时间"};
+    public static String[] getTabletitles() {
+        return tableTitles;
+    }
     private int Promotion_id;
     private int Promotion_model_id;
     private int Promotion_Net_id;

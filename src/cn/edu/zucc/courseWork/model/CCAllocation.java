@@ -4,7 +4,18 @@ import java.util.Date;
 
 public class CCAllocation {
     public CCAllocation(){}
-
+    public String getCell(int col) {
+        if (col==0) return String.valueOf(Net_id_in);
+        else if (col==1) return String.valueOf(car_id);
+        else if (col==2) return String.valueOf(Net_id_out);
+        else if (col==3) return String.valueOf(allocate_id);
+        else if (col==4) return String.valueOf(allocate_time);
+        else return "";
+    }
+    public static final String[] tableTitles = {"调入网点","车辆编号","调出网点","调拨编号","调拨时间"};
+    public static String[] getTabletitles() {
+        return tableTitles;
+    }
     private int Net_id_in;
     private int Net_id_out;
     private int car_id;

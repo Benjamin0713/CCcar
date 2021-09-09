@@ -12,7 +12,22 @@ public class CCModel {
     private int site_num;
     private float price;
     private byte picture;
-
+    public String getCell(int col) {
+        if (col==0) return String.valueOf(Model_id);
+        else if (col==1) return String.valueOf(Type_id);
+        else if (col==2) return Model_name;
+        else if (col==3) return Model_brand;
+        else if (col==4) return String.valueOf(Model_capacity);
+        else if (col==5) return Model_transmission;
+        else if (col==6) return String.valueOf(site_num);
+        else if (col==7) return String.valueOf(price);
+        else if (col==8) return String.valueOf(picture);
+        else return "";
+    }
+    public static final String[] tableTitles = {"车型编号","汽车类别","车型名称","品牌","排量","排档","座位数","租用价格","图片"};
+    public static String[] getTabletitles() {
+        return tableTitles;
+    }
     public int getModel_id() {
         return Model_id;
     }

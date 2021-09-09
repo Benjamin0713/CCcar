@@ -19,7 +19,6 @@ public class FrmStaffInforCheck extends JFrame implements ActionListener {
 
     private JMenuItem  menuItem_name=new JMenuItem("修改用户名");
     private JMenuItem menuItem_pwd = new JMenuItem("修改密码");
-    private JMenuItem menuItem_Net = new JMenuItem("修改工作网点");
     private JMenuItem  menuItem_Cancel = new JMenuItem ("退出");
 
     private JPanel statusBar = new JPanel();
@@ -52,15 +51,23 @@ public class FrmStaffInforCheck extends JFrame implements ActionListener {
         this.setTitle("个人信息管理-员工");
 //        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// 默认关闭方式
         setSize(480, 380);// 设置窗体大小
+
+        // 屏幕居中显示
+//        this.setSize(800, 600);
+        double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+        double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+        this.setLocation((int) (width - this.getWidth()) / 2,
+                (int) (height - this.getHeight()) / 2);
+
+        this.validate();
         this.menu_Modify.add(menuItem_name);this.menuItem_name.addActionListener(this);
         this.menu_Modify.add(menuItem_pwd);this.menuItem_pwd.addActionListener(this);
-        this.menu_Modify.add(menuItem_Net);this.menuItem_Net.addActionListener(this);
         this.menu_cancel.add(menuItem_Cancel);this.menuItem_Cancel.addActionListener(this);
         menubar.add(menu_Modify);
         menubar.add(menu_cancel);
         this.setJMenuBar(menubar);
 
-        this.getContentPane().add(new JScrollPane(this.dataTableStaff), BorderLayout.WEST);
+        this.getContentPane().add(new JScrollPane(this.dataTableStaff), BorderLayout.CENTER);
         this.reloadStaffTable();
 
         //状态栏
@@ -85,6 +92,10 @@ public class FrmStaffInforCheck extends JFrame implements ActionListener {
         }else if (e.getSource() == this.menuItem_Cancel) {
             setVisible(false);
             return;
+        }else if(e.getSource()==this.menuItem_name){
+            FrmModifyStaffname dlg =new FrmModifyStaffname(null, "修改用户名", true);
+            dlg.setVisible(true);
         }
+        this.reloadStaffTable();
     }
 }
