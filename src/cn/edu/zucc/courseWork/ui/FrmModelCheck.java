@@ -18,7 +18,9 @@ public class FrmModelCheck extends JFrame implements ActionListener {
     private JMenuBar menubar=new JMenuBar(); ;
     private JMenu menu_coupon=new JMenu("汽车车型管理");
     private JMenu menu_cancel = new JMenu("退出该界面");
+    private JMenu menu_scrap=new JMenu("信息查询");
 
+    private JMenuItem menuItem_checkmodel=new JMenuItem("查看车类信息");
     private JMenuItem menuItem_couponadd = new JMenuItem("添加车型");
     private JMenuItem menuItem_coupondelete= new JMenuItem("删除车型");
     private JMenuItem menuItem_couponModify = new JMenuItem("修改车型信息");
@@ -51,7 +53,7 @@ public class FrmModelCheck extends JFrame implements ActionListener {
 
     public FrmModelCheck(){
         this.setTitle("汽车管理-车型");
-        setSize(700, 480);// 设置窗体大小
+        setSize(750, 580);// 设置窗体大小
         double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
         double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
         this.setLocation((int) (width - this.getWidth()) / 2,
@@ -62,8 +64,9 @@ public class FrmModelCheck extends JFrame implements ActionListener {
         this.menu_coupon.add(menuItem_coupondelete);this.menuItem_coupondelete.addActionListener(this);
         this.menu_coupon.add(menuItem_couponModify);this.menuItem_couponModify.addActionListener(this);
         this.menu_cancel.add(menuItem_Cancel);this.menuItem_Cancel.addActionListener(this);
-
+        this.menu_scrap.add(menuItem_checkmodel);this.menuItem_checkmodel.addActionListener(this);
         menubar.add(menu_coupon);
+        menubar.add(menu_scrap);
         menubar.add(menu_cancel);
         this.setJMenuBar(menubar);
         this.getContentPane().add(new JScrollPane(this.dataTableModel), BorderLayout.CENTER);
@@ -84,6 +87,23 @@ public class FrmModelCheck extends JFrame implements ActionListener {
         }else if(e.getSource()==this.menuItem_couponadd){
             FrmAddModel dlg=new FrmAddModel(this,"添加车型",true);
             dlg.setVisible(true);
+        }else if(e.getSource()==this.menuItem_coupondelete){
+            int i = FrmModelCheck.this.dataTableModel.getSelectedRow();
+            if (i < 0) {
+                JOptionPane.showMessageDialog(null, "请选择车型", "错误", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            try {
+                CCcarUtil.carModelManager.delete(this.Modeldata.get(i));
+            } catch (BaseException e1) {
+                JOptionPane.showMessageDialog(null, e1.getMessage(), "错误", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }else if(e.getSource()==this.menuItem_couponModify){
+            FrmModifyModel dlg=new FrmModifyModel(null,"修改车型",true);
+            dlg.setVisible(true);
+        }else if(e.getSource()==this.menuItem_checkmodel){
+            new FrmUsercheckType().setVisible(true);
         }
         this.reloadCouponTable();
     }

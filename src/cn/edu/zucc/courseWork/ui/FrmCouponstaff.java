@@ -21,10 +21,12 @@ public class FrmCouponstaff extends JFrame implements ActionListener {
     private JMenuBar menubar=new JMenuBar(); ;
     private JMenu menu_coupon=new JMenu("优惠券管理");
     private JMenu menu_cancel = new JMenu("退出该界面");
+    private JMenu menu_scrap=new JMenu("信息查询");
 
-    private JMenuItem menuItem_couponadd = new JMenuItem("添加");
-    private JMenuItem menuItem_coupondelete= new JMenuItem("删除");
-    private JMenuItem menuItem_couponModify = new JMenuItem("修改");
+    private JMenuItem menuItem_checknet=new JMenuItem("查看网点信息");
+    private JMenuItem menuItem_couponadd = new JMenuItem("添加优惠券");
+    private JMenuItem menuItem_coupondelete= new JMenuItem("删除优惠券");
+    private JMenuItem menuItem_couponModify = new JMenuItem("修改优惠券信息");
     private JMenuItem  menuItem_Cancel = new JMenuItem ("退出");
 
     private JPanel statusBar = new JPanel();
@@ -66,7 +68,9 @@ public class FrmCouponstaff extends JFrame implements ActionListener {
         this.menu_coupon.add(menuItem_couponModify);this.menuItem_couponModify.addActionListener(this);
         this.menu_cancel.add(menuItem_Cancel);this.menuItem_Cancel.addActionListener(this);
 
+        this.menu_scrap.add(menuItem_checknet);this.menuItem_checknet.addActionListener(this);
         menubar.add(menu_coupon);
+        menubar.add(menu_scrap);
         menubar.add(menu_cancel);
         this.setJMenuBar(menubar);
         this.getContentPane().add(new JScrollPane(this.dataTableCoupon), BorderLayout.CENTER);
@@ -87,7 +91,24 @@ public class FrmCouponstaff extends JFrame implements ActionListener {
         }else if(e.getSource()==this.menuItem_couponadd){
             FrmAddCoupon dlg =new FrmAddCoupon(null, "添加优惠券", true);
             dlg.setVisible(true);
+        }else if(e.getSource()==this.menuItem_coupondelete){
+            int i = FrmCouponstaff.this.dataTableCoupon.getSelectedRow();
+            if (i < 0) {
+                JOptionPane.showMessageDialog(null, "请选择优惠券", "错误", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            try {
+                CCcarUtil.couponManager.delete(this.Coupondata.get(i));
+            } catch (BaseException e1) {
+                JOptionPane.showMessageDialog(null, e1.getMessage(), "错误", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }else if(e.getSource()==this.menuItem_couponModify){
+            FrmModifyCoupon dla=new FrmModifyCoupon(null,"修改优惠券",true);
+            dla.setVisible(true);
+        }else if(e.getSource()==this.menuItem_checknet) {
+            new FrmUsercheckNet().setVisible(true);
         }
-        this.reloadCouponTable();
+            this.reloadCouponTable();
     }
 }

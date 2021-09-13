@@ -7,5 +7,8 @@ import java.util.List;
 
 public interface ICarModelManager {
     public List<CCModel> loadAll() throws BaseException;
+    public void delete(CCModel model) throws BaseException;
+    public void changemodel(String model_id, String type, String name,String brand,
+                            String cap,String tran,String site,String price) throws BaseException;
     public void addModel(String type, String name, String brand, String cap,String tran,String site,String price) throws BaseException;
 }

@@ -50,7 +50,7 @@ public class FrmACheckU extends JFrame implements ActionListener {
     public FrmACheckU(){
 //        this.setExtendedState(Frame.MAXIMIZED_BOTH);
         this.setTitle("个人信息管理-用户");
-        setSize(950, 300);// 设置窗体大小
+        setSize(950, 500);// 设置窗体大小
         double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
         double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
         this.setLocation((int) (width - this.getWidth()) / 2,
@@ -80,7 +80,19 @@ public class FrmACheckU extends JFrame implements ActionListener {
          if (e.getSource() == this.menuItem_Cancel) {
             setVisible(false);
             return;
-        }
+        }else if(e.getSource()==this.menuItem_name){
+             int i = FrmACheckU.this.dataTableUser.getSelectedRow();
+             if (i < 0) {
+                 JOptionPane.showMessageDialog(null, "请选择用户", "错误", JOptionPane.ERROR_MESSAGE);
+                 return;
+             }
+             try {
+                 CCcarUtil.userManager.delete(this.Userdata.get(i));
+             } catch (BaseException e1) {
+                 JOptionPane.showMessageDialog(null, e1.getMessage(), "错误", JOptionPane.ERROR_MESSAGE);
+                 return;
+             }
+         }
         this.reloadStaffTable();
     }
 }

@@ -13,7 +13,7 @@ import java.awt.event.ActionListener;
 public class FrmRegisterStaff extends JDialog implements ActionListener {
     private JPanel toolBar = new JPanel();
     private JPanel workPane = new JPanel();
-    private JButton btnOk = new JButton("注册");
+    private JButton btnOk = new JButton("添加");
     private JButton btnCancel = new JButton("取消");
     private JLabel labelstaffId = new JLabel("工作编号：");
     private JLabel labelNet = new JLabel("所在网点：");

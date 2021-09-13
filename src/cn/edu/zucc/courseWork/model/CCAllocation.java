@@ -5,9 +5,9 @@ import java.util.Date;
 public class CCAllocation {
     public CCAllocation(){}
     public String getCell(int col) {
-        if (col==0) return String.valueOf(Net_id_in);
+        if (col==0) return innetname;
         else if (col==1) return String.valueOf(car_id);
-        else if (col==2) return String.valueOf(Net_id_out);
+        else if (col==2) return outnetname;
         else if (col==3) return String.valueOf(allocate_id);
         else if (col==4) return String.valueOf(allocate_time);
         else return "";
@@ -21,7 +21,8 @@ public class CCAllocation {
     private int car_id;
     private int allocate_id;
     private Date allocate_time;
-
+    private String innetname;
+    private String outnetname;
     public int getNet_id_in() {
         return Net_id_in;
     }
@@ -60,5 +61,21 @@ public class CCAllocation {
 
     public void setAllocate_id(int allocate_id) {
         this.allocate_id = allocate_id;
+    }
+
+    public String getInnetname() {
+        return innetname;
+    }
+
+    public void setInnetname(String innetname) {
+        this.innetname = innetname;
+    }
+
+    public String getOutnetname() {
+        return outnetname;
+    }
+
+    public void setOutnetname(String outnetname) {
+        this.outnetname = outnetname;
     }
 }

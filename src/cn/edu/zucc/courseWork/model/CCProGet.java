@@ -14,13 +14,15 @@ public class CCProGet {
     private Date begindate;
     private Date finishdate;
     private float discount;
+    private String netname;
+    private String modelname;
     public String getCell(int col) {
         if (col==0) return String.valueOf(get_id);
 //        else if (col==1) return String.valueOf(user_id);
         else if (col==1) return String.valueOf(pro_id);
         else if (col==2) return String.valueOf(get_time);
-        else if (col==3) return String.valueOf(Net_id);
-        else if (col==4) return String.valueOf(model_id);
+        else if (col==3) return netname;
+        else if (col==4) return modelname;
         else if (col==5) return String.valueOf(discount);
         else if(col==6) return String.valueOf(begindate);
         else if (col==7) return String.valueOf(finishdate);
@@ -109,5 +111,21 @@ public class CCProGet {
 
     public void setDiscount(float discount) {
         this.discount = discount;
+    }
+
+    public String getNetname() {
+        return netname;
+    }
+
+    public void setNetname(String netname) {
+        this.netname = netname;
+    }
+
+    public String getModelname() {
+        return modelname;
+    }
+
+    public void setModelname(String modelname) {
+        this.modelname = modelname;
     }
 }

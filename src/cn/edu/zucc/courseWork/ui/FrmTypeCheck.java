@@ -82,6 +82,21 @@ public class FrmTypeCheck extends JFrame implements ActionListener {
         }else if(e.getSource()==this.menuItem_couponadd){
             FrmAddType dlg =new FrmAddType(null, "添加汽车类别", true);
             dlg.setVisible(true);
+        }else if(e.getSource()==this.menuItem_coupondelete){
+            int i = FrmTypeCheck.this.dataTableType.getSelectedRow();
+            if (i < 0) {
+                JOptionPane.showMessageDialog(null, "请选择车类", "错误", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            try {
+                CCcarUtil.carTypeManager.delete(this.Typedata.get(i));
+            } catch (BaseException e1) {
+                JOptionPane.showMessageDialog(null, e1.getMessage(), "错误", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }else if(e.getSource()==this.menuItem_couponModify){
+            FrmModifyType dlg=new FrmModifyType(null,"修改车类别",true);
+            dlg.setVisible(true);
         }
         this.reloadCouponTable();
     }

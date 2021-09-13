@@ -10,7 +10,7 @@ public class CCCoupon {
         else if (col==2) return String.valueOf(Coupon_money);
         else if (col==3) return String.valueOf(Coupon_start_date);
         else if (col==4) return String.valueOf(Coupon_end_date);
-        else if(col==5) return String.valueOf(Net_id);
+        else if(col==5) return netname;
         else return "";
     }
     public static final String[] tableTitles = {"优惠券编号","内容","减免金额","开始时间","结束时间","优惠网点"};
@@ -23,6 +23,7 @@ public class CCCoupon {
     private Date Coupon_start_date;
     private Date Coupon_end_date;
     private int Net_id;
+    private String netname;
     public int getCoupon_id() {
         return Coupon_id;
     }
@@ -69,5 +70,13 @@ public class CCCoupon {
 
     public void setNet_id(int net_id) {
         Net_id = net_id;
+    }
+
+    public String getNetname() {
+        return netname;
+    }
+
+    public void setNetname(String netname) {
+        this.netname = netname;
     }
 }

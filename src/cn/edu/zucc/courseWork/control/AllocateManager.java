@@ -18,14 +18,18 @@ public class AllocateManager implements IAllocateManager {
         Connection conn =null;
         try {
             conn = DBUtil.getConnection();
-            String sql = "select * from allocation";
+            String sql = "SELECT *\n" +
+                    "from (SELECT Net_name as innet,car_id,Net_id_out,allocate_id,allocate_time\n" +
+                    "from allocation a,net_information b\n" +
+                    "WHERE a.Net_id_in=b.Net_id ) d,net_information c\n" +
+                    "WHERE d.Net_id_out=c.Net_id";
             java.sql.PreparedStatement pst=conn.prepareStatement(sql);
             java.sql.ResultSet rs=pst.executeQuery();
             while(rs.next()) {
                 CCAllocation a=new CCAllocation();
-                a.setNet_id_in(rs.getInt(1));
+                a.setInnetname(rs.getString(1));
                 a.setCar_id(rs.getInt(2));
-                a.setNet_id_out(rs.getInt(3));
+                a.setOutnetname(rs.getString(7));
                 a.setAllocate_id(rs.getInt(4));
                 a.setAllocate_time(rs.getDate(5));
                 result.add(a);

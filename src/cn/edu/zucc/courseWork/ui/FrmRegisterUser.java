@@ -15,15 +15,15 @@ public class FrmRegisterUser extends JDialog implements ActionListener {
     private JButton btnOk = new JButton("注册");
     private JButton btnCancel = new JButton("取消");
 
-    private JLabel labelUser = new JLabel("用户名：");
-    private JLabel labelname = new JLabel("姓名：");
+//    private JLabel labelUser = new JLabel("用户编号：");
+    private JLabel labelname = new JLabel("用户名：");
     private JLabel labelSex = new JLabel("性别：");
     private JLabel labelPwd = new JLabel("密码：");
     private JLabel labelPwd2 = new JLabel("密码：");
     private JLabel labelTell = new JLabel("手机号：");
     private JLabel labelEmai = new JLabel("邮箱：");
     private JLabel labelCity = new JLabel("城市：");
-    private JTextField edtUserId = new JTextField(15);
+//    private JTextField edtUserId = new JTextField(15);
     private JPasswordField edtPwd = new JPasswordField(15);
     private JPasswordField edtPwd2 = new JPasswordField(15);
     private JTextField edtSex = new JTextField(15);
@@ -38,8 +38,8 @@ public class FrmRegisterUser extends JDialog implements ActionListener {
         toolBar.add(this.btnOk);
         toolBar.add(btnCancel);
         this.getContentPane().add(toolBar, BorderLayout.SOUTH);
-        workPane.add(labelUser);
-        workPane.add(edtUserId);
+//        workPane.add(labelUser);
+//        workPane.add(edtUserId);
         workPane.add(labelname);
         workPane.add(edtname);
         workPane.add(labelSex);
@@ -70,7 +70,7 @@ public class FrmRegisterUser extends JDialog implements ActionListener {
         if(e.getSource()==this.btnCancel)
             this.setVisible(false);
         else if(e.getSource()==this.btnOk){
-            String userid=this.edtUserId.getText();
+//            String userid=this.edtUserId.getText();
             String name=this.edtname.getText();
             String sex=this.edtSex.getText();
             String pwd=new String(this.edtPwd.getPassword());
@@ -79,7 +79,7 @@ public class FrmRegisterUser extends JDialog implements ActionListener {
             String email=this.edtEmai.getText();
             String city=this.edtCity.getText();
             try {
-                CCUser user= CCcarUtil.userManager.reg(userid,name,sex,pwd,pwd2,tell,email,city);
+                CCUser user= CCcarUtil.userManager.reg(name,sex,pwd,pwd2,tell,email,city);
                 this.setVisible(false);
             } catch (BaseException e1) {
                 JOptionPane.showMessageDialog(null, e1.getMessage(),"错误",JOptionPane.ERROR_MESSAGE);

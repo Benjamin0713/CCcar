@@ -14,7 +14,7 @@ public class CCModel {
     private byte picture;
     public String getCell(int col) {
         if (col==0) return String.valueOf(Model_id);
-        else if (col==1) return String.valueOf(Type_id);
+        else if (col==1) return typename;
         else if (col==2) return Model_name;
         else if (col==3) return Model_brand;
         else if (col==4) return String.valueOf(Model_capacity);
@@ -24,7 +24,8 @@ public class CCModel {
         else if (col==8) return String.valueOf(picture);
         else return "";
     }
-    public static final String[] tableTitles = {"车型编号","汽车类别","车型名称","品牌","排量","排档","座位数","租用价格","图片"};
+    private String typename;
+    public static final String[] tableTitles = {"车型编号","汽车类别","车型名称","品牌","排量","排档","座位数","租用价格（元/天）","图片"};
     public static String[] getTabletitles() {
         return tableTitles;
     }
@@ -98,5 +99,9 @@ public class CCModel {
 
     public void setPicture(byte picture) {
         this.picture = picture;
+    }
+
+    public void setTypename(String typename) {
+        this.typename = typename;
     }
 }

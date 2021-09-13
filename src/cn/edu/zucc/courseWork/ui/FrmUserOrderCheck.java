@@ -17,6 +17,7 @@ import java.util.List;
 public class FrmUserOrderCheck extends JFrame implements ActionListener {
     private static final long serialVersionUID = 1L;
     private JMenuBar menubar=new JMenuBar(); ;
+    private JMenu menu_more =new JMenu("信息查看");
     private JMenu menu_cancel = new JMenu("退出该界面");
 
     private JPanel toolBar = new JPanel();
@@ -27,6 +28,9 @@ public class FrmUserOrderCheck extends JFrame implements ActionListener {
     private JLabel labelprice = new JLabel("使用优惠券");
     private JLabel labelstart = new JLabel("使用折扣");
 
+    private JMenuItem menuItem_coupon_taken = new JMenuItem("查看已领取的优惠券");
+    private JMenuItem menuItem_promote_taken = new JMenuItem("查看获得的折扣");
+    private JMenuItem menuItem_checknet=new JMenuItem("查看网点信息");
     private JTextField edtName = new JTextField(9);
     private JTextField edtprice = new JTextField(9);
     private JTextField edtstart = new JTextField(9);
@@ -69,7 +73,9 @@ public class FrmUserOrderCheck extends JFrame implements ActionListener {
         workPane.add(labelstart);
         workPane.add(edtstart);;
         this.getContentPane().add(workPane, BorderLayout.NORTH);
-
+        this.menu_more.add(menuItem_coupon_taken);this.menuItem_coupon_taken.addActionListener(this);
+        this.menu_more.add(menuItem_promote_taken);this.menuItem_promote_taken.addActionListener(this);
+        this.menu_more.add(menuItem_checknet);this.menuItem_checknet.addActionListener(this);
         double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
         double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
         this.setLocation((int) (width - this.getWidth()) / 2,
@@ -82,7 +88,9 @@ public class FrmUserOrderCheck extends JFrame implements ActionListener {
         this.menu_cancel.add(menuItem_Cancel);this.menuItem_Cancel.addActionListener(this);
 
 //        menubar.add(menu_scrap);
+        menubar.add(menu_more);
         menubar.add(menu_cancel);
+
         this.setJMenuBar(menubar);
         this.getContentPane().add(new JScrollPane(this.dataTableOrder), BorderLayout.CENTER);
         this.reloadCouponTable();
@@ -109,6 +117,12 @@ public class FrmUserOrderCheck extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null, e1.getMessage(), "错误", JOptionPane.ERROR_MESSAGE);
                 return;
             }
+        }else if(e.getSource()==this.menuItem_coupon_taken){
+            new FrmUserGetCou().setVisible(true);
+        }else if(e.getSource()==this.menuItem_promote_taken){
+            new FrmUserGetPro().setVisible(true);
+        }else if(e.getSource()==this.menuItem_checknet){
+            new FrmUsercheckNet().setVisible(true);
         }
         this.reloadCouponTable();
     }

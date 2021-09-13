@@ -18,12 +18,14 @@ public class CCOrder {
     private float Ori_amount;
     private float Set_amount;
     private String Order_state;
+    private String picknetname;
+    private String returnnetname;
     public String getCell(int col) {
         if (col==0) return String.valueOf(Order_id);
         else if (col==1) return String.valueOf(Order_car_id);
-        else if (col==2) return String.valueOf(Pick_Net_id);
+        else if (col==2) return picknetname;
         else if (col==3) return String.valueOf(Pick_time);
-        else if (col==4) return String.valueOf(Return_Net_id);
+        else if (col==4) return returnnetname;
         else if (col==5) return String.valueOf(Return_time);
         else if (col==6) return String.valueOf(Pick_total_time);
         else if(col==7) return String.valueOf(Set_amount);
@@ -32,7 +34,7 @@ public class CCOrder {
         else if(col==10) return Order_state;
         else return "";
     }
-    public static final String[] tableTitles = {"序号","汽车编号","借车网点","借车时间","还车网点","还车时间","租车时长","支付金额","使用优惠券","使用折扣","订单状态"};
+    public static final String[] tableTitles = {"序号","汽车编号","借车网点","借车时间","还车网点","还车时间","租车时长","支付金额（元/天）","使用优惠券","使用折扣","订单状态"};
     public static String[] getTabletitles() {
         return tableTitles;
     }
@@ -138,5 +140,21 @@ public class CCOrder {
 
     public void setOrder_state(String order_state) {
         Order_state = order_state;
+    }
+
+    public String getPicknetname() {
+        return picknetname;
+    }
+
+    public void setPicknetname(String picknetname) {
+        this.picknetname = picknetname;
+    }
+
+    public String getReturnnetname() {
+        return returnnetname;
+    }
+
+    public void setReturnnetname(String returnnetname) {
+        this.returnnetname = returnnetname;
     }
 }

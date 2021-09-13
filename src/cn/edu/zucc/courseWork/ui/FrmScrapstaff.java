@@ -17,7 +17,10 @@ public class FrmScrapstaff extends JFrame implements ActionListener {
     private JMenuBar menubar=new JMenuBar(); ;
     private JMenu menu_scrap=new JMenu("报废管理");
     private JMenu menu_cancel = new JMenu("退出该界面");
+    private JMenu menu_check=new JMenu("信息查询");
 
+    private JMenuItem menuItem_checkmodel=new JMenuItem("查看车型信息");
+    private JMenuItem menuItem_checknet=new JMenuItem("查看网点信息");
     private JMenuItem menuItem_scrap = new JMenuItem("报废");
     private JMenuItem  menuItem_Cancel = new JMenuItem ("退出");
     private JPanel statusBar = new JPanel();
@@ -46,7 +49,7 @@ public class FrmScrapstaff extends JFrame implements ActionListener {
     }
     public FrmScrapstaff(){
         this.setTitle("车辆信息-员工");
-        setSize(550, 380);// 设置窗体大小
+        setSize(850, 490);// 设置窗体大小
         double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
         double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
         this.setLocation((int) (width - this.getWidth()) / 2,
@@ -56,7 +59,10 @@ public class FrmScrapstaff extends JFrame implements ActionListener {
         this.menu_scrap.add(menuItem_scrap);this.menuItem_scrap.addActionListener(this);
         this.menu_cancel.add(menuItem_Cancel);this.menuItem_Cancel.addActionListener(this);
 
+        this.menu_check.add(menuItem_checknet);this.menuItem_checknet.addActionListener(this);
+        this.menu_check.add(menuItem_checkmodel);this.menuItem_checkmodel.addActionListener(this);
         menubar.add(menu_scrap);
+        menubar.add(menu_check);
         menubar.add(menu_cancel);
         this.setJMenuBar(menubar);
         this.getContentPane().add(new JScrollPane(this.dataTableCar), BorderLayout.CENTER);
@@ -86,6 +92,10 @@ public class FrmScrapstaff extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null, e1.getMessage(), "错误", JOptionPane.ERROR_MESSAGE);
                 return;
             }
+        }else if(e.getSource()==this.menuItem_checknet){
+            new FrmUsercheckNet().setVisible(true);
+        }else if(e.getSource()==this.menuItem_checkmodel){
+            new FrmUsercheckModel().setVisible(true);
         }
         this.reloadCouponTable();
     }

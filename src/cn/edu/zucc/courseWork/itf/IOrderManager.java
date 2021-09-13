@@ -8,7 +8,7 @@ import cn.edu.zucc.courseWork.util.BaseException;
 import java.util.List;
 
 public interface IOrderManager {
-    public void ordercar(CCCar car) throws BaseException;
+    public void ordercar(CCCar car,String date) throws BaseException;
     public List<CCOrder> loadAll() throws BaseException;
     public void endOrder(CCOrder order,String net,String coupon,String pro) throws BaseException;
     public List<CCOrder> loadAllOver() throws BaseException;

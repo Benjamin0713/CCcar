@@ -202,14 +202,14 @@ public class StaffManager implements IStaffManager {
         Connection conn =null;
         try {
             conn = DBUtil.getConnection();
-            String sql = "select * from staff where name = ?";
+            String sql = "select * from staff a,net_information b WHERE a.Net_id=b.Net_id and name = ?";
             java.sql.PreparedStatement pst=conn.prepareStatement(sql);
             pst.setString(1,CCStaff.currentLoginStaff.getStaff_name());
             java.sql.ResultSet rs=pst.executeQuery();
             while(rs.next()) {
                 CCStaff s = new CCStaff();
                 s.setStaff_id(rs.getInt(1));
-                s.setStaff_Net_id(rs.getInt(2));
+                s.setNet_name(rs.getString(6));
                 s.setStaff_name(rs.getString(3));
                 s.setStaff_pwd(rs.getString(4));
                 result.add(s);
@@ -236,15 +236,16 @@ public class StaffManager implements IStaffManager {
         Connection conn =null;
         try {
             conn = DBUtil.getConnection();
-            String sql = "SELECT *\n" +
-                    "FROM staff\n" +
-                    "where Net_id is not NULL";
+            String sql = "select *\n" +
+                    "from staff a,net_information b\n" +
+                    "WHERE a.Net_id=b.Net_id";
             java.sql.PreparedStatement pst=conn.prepareStatement(sql);
             java.sql.ResultSet rs=pst.executeQuery();
             while(rs.next()) {
                 CCStaff s = new CCStaff();
                 s.setStaff_id(rs.getInt(1));
-                s.setStaff_Net_id(rs.getInt(2));
+                s.setNet_name(rs.getString(6));
+                //                s.setStaff_Net_id(rs.getInt(2));
                 s.setStaff_name(rs.getString(3));
                 s.setStaff_pwd(rs.getString(4));
                 result.add(s);
@@ -265,5 +266,89 @@ public class StaffManager implements IStaffManager {
                 }
         }
         return result;
+    }
+    public void delete(CCStaff staff) throws BaseException {
+        // 删除
+        Connection conn=null;
+        try {
+            conn = DBUtil.getConnection();
+            String sql="select * from staff where staff_id=?";
+            java.sql.PreparedStatement pst=conn.prepareStatement(sql);
+            pst.setInt(1,staff.getStaff_id());
+            java.sql.ResultSet rs=pst.executeQuery();
+            if(!rs.next()){
+                rs.close();pst.close();
+                throw new BusinessException("该员工不存在");
+            }
+            rs.close();pst.close();
+            sql="select * from scrap where staff_id=?";
+            pst=conn.prepareStatement(sql);
+            pst.setInt(1,staff.getStaff_id());
+            rs=pst.executeQuery();
+            if(rs.next()){
+                throw new BusinessException("该员工认真干活，无法删除");
+            }
+            rs.close();pst.close();
+            sql="delete from staff where staff_id=?";
+            pst=conn.prepareStatement(sql);
+            pst.setInt(1,staff.getStaff_id());
+            pst.execute();
+            pst.close();
+        }catch (SQLException e){
+            throw new DbException(e);
+        }finally {
+            if(conn!=null){
+                try{
+                    conn.close();
+                }catch (SQLException ex){
+                    ex.printStackTrace();
+                }
+            }
+        }
+    }
+    public void changeNet(CCStaff staff, String oldNet, String newNet) throws BaseException{
+        if(Integer.parseInt(oldNet)!=staff.getStaff_Net_id()) throw new BusinessException("原网点输入错误");
+        if(oldNet.equals(newNet)) throw new BusinessException("不需要修改");
+        Connection conn=null;
+        try {
+            conn = DBUtil.getConnection();
+            String sql = "select * from staff where pwd=?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1,staff.getStaff_pwd());
+            ResultSet rs = pst.executeQuery();
+            if(!rs.next()){
+                rs.close();
+                pst.close();
+                throw new BusinessException("登录员工不存在");
+            }
+            int staff_id=rs.getInt(1);
+            rs.close();
+            pst.close();
+            sql="select * from net_information where Net_id=?";
+            pst=conn.prepareStatement(sql);
+            pst.setInt(1, Integer.parseInt(newNet));
+            rs=pst.executeQuery();
+            if(!rs.next()){
+                rs.close();pst.close();
+                throw new BusinessException("该网点不存在");
+            }
+            rs.close();pst.close();
+            sql="update staff set Net_id=? where staff_id=?";
+            pst=conn.prepareStatement(sql);
+            pst.setInt(1, Integer.parseInt(newNet));
+            pst.setInt(2,staff_id);
+            pst.execute();
+            pst.close();
+        }catch (SQLException e){
+            throw new DbException(e);
+        }finally {
+            if(conn!=null){
+                try{
+                    conn.close();
+                }catch (SQLException ex){
+                    ex.printStackTrace();
+                }
+            }
+        }
     }
 }

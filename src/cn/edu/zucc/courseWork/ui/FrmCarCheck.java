@@ -18,7 +18,10 @@ public class FrmCarCheck extends JFrame implements ActionListener {
     private JMenuBar menubar=new JMenuBar(); ;
     private JMenu menu_coupon=new JMenu("车辆管理");
     private JMenu menu_cancel = new JMenu("退出该界面");
+    private JMenu menu_scrap=new JMenu("信息查询");
 
+    private JMenuItem menuItem_checkmodel=new JMenuItem("查看车型信息");
+    private JMenuItem menuItem_checknet=new JMenuItem("查看网点信息");
     private JMenuItem menuItem_couponadd = new JMenuItem("添加车辆");
     private JMenuItem menuItem_coupondelete= new JMenuItem("删除车辆");
     private JMenuItem menuItem_couponModify = new JMenuItem("修改车辆信息");
@@ -51,7 +54,7 @@ public class FrmCarCheck extends JFrame implements ActionListener {
 
     public FrmCarCheck(){
         this.setTitle("汽车管理-车辆");
-        setSize(700, 480);// 设置窗体大小
+        setSize(700, 550);// 设置窗体大小
         double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
         double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
         this.setLocation((int) (width - this.getWidth()) / 2,
@@ -59,11 +62,14 @@ public class FrmCarCheck extends JFrame implements ActionListener {
 
         this.validate();
         this.menu_coupon.add(menuItem_couponadd);this.menuItem_couponadd.addActionListener(this);
+        this.menu_scrap.add(menuItem_checknet);this.menuItem_checknet.addActionListener(this);
+        this.menu_scrap.add(menuItem_checkmodel);this.menuItem_checkmodel.addActionListener(this);
         this.menu_coupon.add(menuItem_coupondelete);this.menuItem_coupondelete.addActionListener(this);
         this.menu_coupon.add(menuItem_couponModify);this.menuItem_couponModify.addActionListener(this);
         this.menu_cancel.add(menuItem_Cancel);this.menuItem_Cancel.addActionListener(this);
 
         menubar.add(menu_coupon);
+        menubar.add(menu_scrap);
         menubar.add(menu_cancel);
         this.setJMenuBar(menubar);
         this.getContentPane().add(new JScrollPane(this.dataTableCar), BorderLayout.CENTER);
@@ -84,6 +90,25 @@ public class FrmCarCheck extends JFrame implements ActionListener {
         }else if(e.getSource()==this.menuItem_couponadd){
             FrmAddCar dlg =new FrmAddCar(null, "添加车辆", true);
             dlg.setVisible(true);
+        }else if(e.getSource()==this.menuItem_coupondelete){
+            int i = FrmCarCheck.this.dataTableCar.getSelectedRow();
+            if (i < 0) {
+                JOptionPane.showMessageDialog(null, "请选择车辆", "错误", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            try {
+                CCcarUtil.carManager.delete(this.Cardata.get(i));
+            } catch (BaseException e1) {
+                JOptionPane.showMessageDialog(null, e1.getMessage(), "错误", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }else if(e.getSource()==this.menuItem_couponModify){
+            FrmModifyCar dlg=new FrmModifyCar(null,"修改车辆信息",true);
+            dlg.setVisible(true);
+        }else if(e.getSource()==this.menuItem_checknet){
+            new FrmUsercheckNet().setVisible(true);
+        }else if(e.getSource()==this.menuItem_checkmodel){
+            new FrmUsercheckModel().setVisible(true);
         }
         this.reloadCouponTable();
     }

@@ -61,7 +61,7 @@ public class ScrapManager implements IScrapManager {
                 throw new BusinessException("该车辆不存在");
             }
             String state=rs.getString(5);
-            if(state.equals("out")) throw new BusinessException("该车被租出，不可报废");
+            if(state.equals("租出")) throw new BusinessException("该车被租出，不可报废");
             rs.close();
             pst.close();
             sql="select * from scrap where car_id=?";
@@ -75,7 +75,7 @@ public class ScrapManager implements IScrapManager {
             }
             rs.close();
             pst.close();
-            sql="update car_information set state='scrap' where car_id=?";
+            sql="update car_information set state='报废' where car_id=?";
             pst=conn.prepareStatement(sql);
             pst.setInt(1,car.getCar_id());
             pst.execute();

@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.List;
 
 public class OrderManager implements IOrderManager {
-    public void ordercar(CCCar car) throws BaseException {
+    public void ordercar(CCCar car,String date) throws BaseException {
         Connection conn=null;
         try {
             conn = DBUtil.getConnection();
@@ -46,21 +46,43 @@ public class OrderManager implements IOrderManager {
             float orginal_amount=rs.getFloat(8);
             rs.close();
             pst.close();
-            sql="insert into orderlist(user_id,car_id,pick_net_id,pick_time,Original_mount,order_state) values (?,?,?,?,?,?)";
-            pst=conn.prepareStatement(sql);
-            pst.setInt(1,user_id);
-            pst.setInt(2,car_id);
-            pst.setInt(3,net_id);
-            pst.setTimestamp(4,new java.sql.Timestamp(System.currentTimeMillis()));
-            pst.setFloat(5,orginal_amount);
-            pst.setString(6,"paying");
-            pst.execute();
-            pst.close();
-            sql="update car_information set state='out' where car_id=?";
-            pst=conn.prepareStatement(sql);
-            pst.setInt(1,car_id);
-            pst.execute();
-            pst.close();
+            if(date==null||"".equals(date)){
+                sql="insert into orderlist(user_id,car_id,pick_net_id,pick_time," +
+                        "Original_mount,order_state) values (?,?,?,?,?,?)";
+                pst=conn.prepareStatement(sql);
+                pst.setInt(1,user_id);
+                pst.setInt(2,car_id);
+                pst.setInt(3,net_id);
+                pst.setTimestamp(4,new java.sql.Timestamp(System.currentTimeMillis()));
+//                pst.setString(5, date);
+                pst.setFloat(5,orginal_amount);
+                pst.setString(6,"进行中");
+                pst.execute();
+                pst.close();
+                sql="update car_information set state='租出' where car_id=?";
+                pst=conn.prepareStatement(sql);
+                pst.setInt(1,car_id);
+                pst.execute();
+                pst.close();
+            }else {
+                sql="insert into orderlist(user_id,car_id,pick_net_id,pick_time,pick_total_time," +
+                        "Original_mount,order_state) values (?,?,?,?,?,?,?)";
+                pst=conn.prepareStatement(sql);
+                pst.setInt(1,user_id);
+                pst.setInt(2,car_id);
+                pst.setInt(3,net_id);
+                pst.setTimestamp(4,new java.sql.Timestamp(System.currentTimeMillis()));
+                pst.setString(5, date);
+                pst.setFloat(6,orginal_amount);
+                pst.setString(7,"进行中");
+                pst.execute();
+                pst.close();
+                sql="update car_information set state='租出' where car_id=?";
+                pst=conn.prepareStatement(sql);
+                pst.setInt(1,car_id);
+                pst.execute();
+                pst.close();
+            }
         }catch (SQLException e){
             throw new DbException(e);
         }finally {
@@ -78,25 +100,26 @@ public class OrderManager implements IOrderManager {
         Connection conn =null;
         try {
             conn = DBUtil.getConnection();
-            String sql = "select * from orderlist where user_id = ? and order_state='payed'";
+            String sql = "SELECT * FROM (SELECT user_id,coupon_id,promotion_id,car_id,order_id,Net_id,Net_name,pick_time,return_Net_id,return_time,pick_total_time,Original_mount,Settlement_amount,order_state from orderlist a,net_information b WHERE a.pick_Net_id=b.Net_id ) d,net_information c WHERE d.return_Net_id=c.Net_id and user_id = ? and order_state='已支付'";
             java.sql.PreparedStatement pst=conn.prepareStatement(sql);
             pst.setInt(1,CCUser.currentLoginUser.getUser_id());
             java.sql.ResultSet rs=pst.executeQuery();
             while(rs.next()) {
                 CCOrder o = new CCOrder();
+                o.setPick_Net_id(rs.getInt(6));
                 o.setOrder_user_id(rs.getInt(1));
                 o.setOrder_coupon_id(rs.getInt(2));
                 o.setOrder_promotion_id(rs.getInt(3));
                 o.setOrder_car_id(rs.getInt(4));
                 o.setOrder_id(rs.getInt(5));
-                o.setPick_Net_id(rs.getInt(6));
-                o.setPick_time(rs.getTimestamp(7));
-                o.setReturn_Net_id(rs.getInt(8));
-                o.setReturn_time(rs.getTimestamp(9));
-                o.setPick_total_time(rs.getInt(10));
-                o.setOri_amount(rs.getFloat(11));
-                o.setSet_amount(rs.getFloat(12));
-                o.setOrder_state(rs.getString(13));
+                o.setPicknetname(rs.getString(7));
+                o.setPick_time(rs.getTimestamp(8));
+                o.setReturnnetname(rs.getString(16));
+                o.setReturn_time(rs.getTimestamp(10));
+                o.setPick_total_time(rs.getInt(11));
+                o.setOri_amount(rs.getFloat(12));
+                o.setSet_amount(rs.getFloat(13));
+                o.setOrder_state(rs.getString(14));
                 result.add(o);
             }
             rs.close();
@@ -121,7 +144,9 @@ public class OrderManager implements IOrderManager {
         Connection conn =null;
         try {
             conn = DBUtil.getConnection();
-            String sql = "select * from orderlist where user_id = ? and order_state='paying'";
+            String sql = "SELECT user_id,coupon_id,promotion_id,car_id,order_id,Net_id,Net_name,pick_time,return_Net_id,return_time,pick_total_time,Original_mount,Settlement_amount,order_state\n" +
+                    "from orderlist a,net_information b\n" +
+                    "WHERE a.pick_Net_id=b.Net_id and user_id = ? and order_state='进行中'";
             java.sql.PreparedStatement pst=conn.prepareStatement(sql);
             pst.setInt(1,CCUser.currentLoginUser.getUser_id());
             java.sql.ResultSet rs=pst.executeQuery();
@@ -133,13 +158,14 @@ public class OrderManager implements IOrderManager {
                 o.setOrder_car_id(rs.getInt(4));
                 o.setOrder_id(rs.getInt(5));
                 o.setPick_Net_id(rs.getInt(6));
-                o.setPick_time(rs.getTimestamp(7));
-                o.setReturn_Net_id(rs.getInt(8));
-                o.setReturn_time(rs.getTimestamp(9));
-                o.setPick_total_time(rs.getInt(10));
-                o.setOri_amount(rs.getFloat(11));
-                o.setSet_amount(rs.getFloat(12));
-                o.setOrder_state(rs.getString(13));
+                o.setPicknetname(rs.getString(7));
+                o.setPick_time(rs.getTimestamp(8));
+                o.setReturn_Net_id(rs.getInt(9));
+                o.setReturn_time(rs.getTimestamp(10));
+                o.setPick_total_time(rs.getInt(11));
+                o.setOri_amount(rs.getFloat(12));
+                o.setSet_amount(rs.getFloat(13));
+                o.setOrder_state(rs.getString(14));
                 result.add(o);
             }
             rs.close();
@@ -164,7 +190,7 @@ public class OrderManager implements IOrderManager {
         Connection conn =null;
         try {
             conn = DBUtil.getConnection();
-            String sql = "select * from orderlist where user_id = ?";
+            String sql = "SELECT * FROM (SELECT user_id,coupon_id,promotion_id,car_id,order_id,Net_id,Net_name,pick_time,return_Net_id,return_time,pick_total_time,Original_mount,Settlement_amount,order_state from orderlist a,net_information b WHERE a.pick_Net_id=b.Net_id ) d,net_information c WHERE d.return_Net_id=c.Net_id and user_id = ?";
             java.sql.PreparedStatement pst=conn.prepareStatement(sql);
             pst.setInt(1,user.getUser_id());
             java.sql.ResultSet rs=pst.executeQuery();
@@ -176,13 +202,14 @@ public class OrderManager implements IOrderManager {
                 o.setOrder_car_id(rs.getInt(4));
                 o.setOrder_id(rs.getInt(5));
                 o.setPick_Net_id(rs.getInt(6));
-                o.setPick_time(rs.getTimestamp(7));
-                o.setReturn_Net_id(rs.getInt(8));
-                o.setReturn_time(rs.getTimestamp(9));
-                o.setPick_total_time(rs.getInt(10));
-                o.setOri_amount(rs.getFloat(11));
-                o.setSet_amount(rs.getFloat(12));
-                o.setOrder_state(rs.getString(13));
+                o.setPicknetname(rs.getString(7));
+                o.setPick_time(rs.getTimestamp(8));
+                o.setReturnnetname(rs.getString(16));
+                o.setReturn_time(rs.getTimestamp(10));
+                o.setPick_total_time(rs.getInt(11));
+                o.setOri_amount(rs.getFloat(12));
+                o.setSet_amount(rs.getFloat(13));
+                o.setOrder_state(rs.getString(14));
                 result.add(o);
             }
             rs.close();
@@ -207,7 +234,11 @@ public class OrderManager implements IOrderManager {
         Connection conn =null;
         try {
             conn = DBUtil.getConnection();
-            String sql = "select * from orderlist where car_id = ?";
+            String sql = "SELECT *\n" +
+                    "FROM (SELECT user_id,coupon_id,promotion_id,car_id,order_id,Net_id,Net_name,pick_time,return_Net_id,return_time,pick_total_time,Original_mount,Settlement_amount,order_state\n" +
+                    "from orderlist a,net_information b\n" +
+                    "WHERE a.pick_Net_id=b.Net_id ) d,net_information c\n" +
+                    "WHERE d.return_Net_id=c.Net_id and car_id = ?";
             java.sql.PreparedStatement pst=conn.prepareStatement(sql);
             pst.setInt(1,Car.getCar_id());
             java.sql.ResultSet rs=pst.executeQuery();
@@ -219,13 +250,14 @@ public class OrderManager implements IOrderManager {
                 o.setOrder_car_id(rs.getInt(4));
                 o.setOrder_id(rs.getInt(5));
                 o.setPick_Net_id(rs.getInt(6));
-                o.setPick_time(rs.getTimestamp(7));
-                o.setReturn_Net_id(rs.getInt(8));
-                o.setReturn_time(rs.getTimestamp(9));
-                o.setPick_total_time(rs.getInt(10));
-                o.setOri_amount(rs.getFloat(11));
-                o.setSet_amount(rs.getFloat(12));
-                o.setOrder_state(rs.getString(13));
+                o.setPicknetname(rs.getString(7));
+                o.setPick_time(rs.getTimestamp(8));
+                o.setReturnnetname(rs.getString(16));
+                o.setReturn_time(rs.getTimestamp(10));
+                o.setPick_total_time(rs.getInt(11));
+                o.setOri_amount(rs.getFloat(12));
+                o.setSet_amount(rs.getFloat(13));
+                o.setOrder_state(rs.getString(14));
                 result.add(o);
             }
             rs.close();
@@ -262,15 +294,19 @@ public class OrderManager implements IOrderManager {
             rs.close();pst.close();
             int car_id=order.getOrder_car_id();
             int picknet=order.getPick_Net_id();
+            int timeorder=order.getPick_total_time();
+            System.out.println(timeorder);
+            System.out.println(picknet);
             float orimoney=order.getOri_amount();
-            sql="select * from net_information where Net_id=?";
+            sql="select Net_id from net_information where Net_name=?";
             pst=conn.prepareStatement(sql);
-            pst.setInt(1, Integer.parseInt(net));
+            pst.setString(1, net);
             rs=pst.executeQuery();
             if(!rs.next()){
                 rs.close();pst.close();
                 throw new BusinessException("归还网点不存在");
             }
+            int Net_id=rs.getInt(1);
             rs.close();pst.close();
             int model_id;
             sql="select model_id from car_information where car_id=?";
@@ -336,19 +372,20 @@ public class OrderManager implements IOrderManager {
             if(rs.next()){
                 if("".equals(net)){
                 }else {
-                    if(picknet!=Integer.parseInt(net)){
+                    if(picknet!=Net_id){
                         sql="insert into allocation(Net_id_in,car_id,Net_id_out,allocate_time) values(?,?,?,?)";
                         pst=conn.prepareStatement(sql);
-                        pst.setInt(1,picknet);
+                        pst.setInt(1,Net_id);
                         pst.setInt(2,car_id);
-                        pst.setInt(3, Integer.parseInt(net));
+                        pst.setInt(3, picknet);
                         pst.setTimestamp(4,new java.sql.Timestamp(System.currentTimeMillis()));
                         pst.execute();
                     }
 
-                    sql="update car_information set state='fill' where car_id=?";
+                    sql="update car_information set state='空闲',Net_id=? where car_id=?";
                     pst=conn.prepareStatement(sql);
-                    pst.setInt(1,car_id);
+                    pst.setInt(1,Net_id);
+                    pst.setInt(2,car_id);
                     pst.execute();
                 }
             }
@@ -356,33 +393,80 @@ public class OrderManager implements IOrderManager {
             int picktime=order.getPick_time().getDate();
             int returntime=new Date(System.currentTimeMillis()).getDate();
             int renttime=returntime-picktime+1;
-            float total_amonunt;
-            if(C==true&&P==true)
-                total_amonunt=orimoney*prodis/10*renttime-coumoney;
-            else if(C==true&&P==false)
-                total_amonunt=orimoney*1*renttime-coumoney;
-            else if(C==false&&P==true)
-                total_amonunt=orimoney*prodis/10*renttime;
-            else
-                total_amonunt=orimoney*1*renttime;
 
-            sql="update orderlist set coupon_id=?,promotion_id=?,return_Net_id=?,return_time=?,pick_total_time=?,Settlement_amount=?,order_state='payed' where user_id=?";
+            if(C==true&&P==true){
+                if((orimoney*prodis/10*timeorder-coumoney)<0)
+                    throw new BusinessException("优惠或折扣不适用");
+            }
+            else if(C==true&&P==false){
+                if((orimoney*1*timeorder-coumoney)<0)
+                    throw new BusinessException("优惠或折扣不适用");
+            }
+
+            else if(C==false&&P==true){
+                if((orimoney*prodis/10*timeorder)<0)
+                    throw new BusinessException("优惠或折扣不适用");
+            }
+            else{
+                if((orimoney*1*timeorder)<0)
+                    throw new BusinessException("优惠或折扣不适用");
+            }
+//            System.out.println(555555555);
+//            System.out.println(picktime);
+//            System.out.println(returntime);
+            float total_amonunt;
+
+            if(C==true&&P==true){
+                total_amonunt=orimoney*prodis/10*renttime-coumoney;
+                if(total_amonunt<0)
+                    throw new BusinessException("优惠或折扣不适用");
+            }
+            else if(C==true&&P==false){
+                total_amonunt=orimoney*1*renttime-coumoney;
+                if(total_amonunt<0)
+                    throw new BusinessException("优惠或折扣不适用");
+            }
+
+            else if(C==false&&P==true){
+                total_amonunt=orimoney*prodis/10*renttime;
+                if(total_amonunt<0)
+                    throw new BusinessException("优惠或折扣不适用");
+            }
+            else{
+                total_amonunt=orimoney*1*renttime;
+                if(total_amonunt<0)
+                    throw new BusinessException("优惠或折扣不适用");
+            }
+            sql="update orderlist set coupon_id=?,promotion_id=?,return_Net_id=?,return_time=?,pick_total_time=?,Settlement_amount=?,order_state='已支付' where user_id=? and order_id=?";
             pst=conn.prepareStatement(sql);
             if("".equals(coupon)){
                 pst.setString(1,null);
             }else {
                 pst.setInt(1, Integer.parseInt(coupon));
+                String sql2="delete from coupon_hold where coupon_id=? and user_id=?";
+                java.sql.PreparedStatement pst2=conn.prepareStatement(sql2);
+                pst2.setInt(1, Integer.parseInt(coupon));
+                pst2.setInt(2,CCUser.currentLoginUser.getUser_id());
+                pst2.execute();
+                pst2.close();
             }
             if("".equals(pro)){
                 pst.setString(2,null);
             }else{
                 pst.setInt(2, Integer.parseInt(pro));
+                String sql1="delete from pro_get where promotion_id=? and user_id=?";
+                java.sql.PreparedStatement pst1=conn.prepareStatement(sql1);
+                pst1.setInt(1, Integer.parseInt(pro));
+                pst1.setInt(2,CCUser.currentLoginUser.getUser_id());
+                pst1.execute();
+                pst1.close();
             }
-            pst.setInt(3, Integer.parseInt(net));
+            pst.setInt(3, Net_id);
             pst.setTimestamp(4,new java.sql.Timestamp(System.currentTimeMillis()));
             pst.setInt(5,renttime);
             pst.setFloat(6,total_amonunt);
             pst.setInt(7,CCUser.currentLoginUser.getUser_id());
+            pst.setInt(8,order.getOrder_id());
             pst.execute();
             pst.close();
         }catch (SQLException e){

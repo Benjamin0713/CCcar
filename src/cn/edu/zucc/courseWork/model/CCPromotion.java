@@ -6,8 +6,8 @@ public class CCPromotion {
     public CCPromotion(){}
     public String getCell(int col) {
         if (col==0) return String.valueOf(Promotion_id);
-        else if (col==1) return String.valueOf(Promotion_Net_id);
-        else if (col==2) return String.valueOf(Promotion_model_id);
+        else if (col==1) return netname;
+        else if (col==2) return modelname;
         else if (col==3) return String.valueOf(discount);
         else if (col==4) return String.valueOf(number);
         else if(col==5) return String.valueOf(begin_date);
@@ -25,7 +25,8 @@ public class CCPromotion {
     private int number;
     private Date begin_date;
     private Date finish_date;
-
+    private String netname;
+    private String modelname;
     public int getPromotion_id() {
         return Promotion_id;
     }
@@ -80,5 +81,21 @@ public class CCPromotion {
 
     public void setFinish_date(Date finish_date) {
         this.finish_date = finish_date;
+    }
+
+    public String getNetname() {
+        return netname;
+    }
+
+    public void setNetname(String netname) {
+        this.netname = netname;
+    }
+
+    public String getModelname() {
+        return modelname;
+    }
+
+    public void setModelname(String modelname) {
+        this.modelname = modelname;
     }
 }

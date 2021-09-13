@@ -4,9 +4,9 @@ public class CCCar {
     public CCCar(){}
     public String getCell(int col) {
         if (col==0) return String.valueOf(car_id);
-        else if (col==1) return String.valueOf(model_id);
+        else if (col==1) return model_name;
         else if (col==2) return car_license;
-        else if (col==3) return String.valueOf(Net_id);
+        else if (col==3) return net_name;
         else if (col==4) return car_state;
         else return "";
     }
@@ -30,7 +30,8 @@ public class CCCar {
     private String car_license;
     private int Net_id;
     private String car_state;
-
+    private String model_name;
+    private String net_name;
     public int getTotal_order() {
         return Total_order;
     }
@@ -88,5 +89,21 @@ public class CCCar {
 
     public void setCar_state(String car_state) {
         this.car_state = car_state;
+    }
+
+    public String getNet_name() {
+        return net_name;
+    }
+
+    public void setNet_name(String net_name) {
+        this.net_name = net_name;
+    }
+
+    public String getModel_name() {
+        return model_name;
+    }
+
+    public void setModel_name(String model_name) {
+        this.model_name = model_name;
     }
 }

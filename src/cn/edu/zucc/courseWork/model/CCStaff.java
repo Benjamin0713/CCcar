@@ -6,12 +6,13 @@ public class CCStaff {
     public static CCStaff currentLoginStaff=null;
     private int Staff_id;
     private int Staff_Net_id;
+    private String Net_name;
     private String Staff_name;
     private String Staff_pwd;
 
     public String getCell(int col) {
         if (col==0) return String.valueOf(Staff_id);
-        else if (col==1) return String.valueOf(Staff_Net_id);
+        else if (col==1) return Net_name;
         else if (col==2) return Staff_name;
         else if (col==3) return Staff_pwd;
         else return "";
@@ -55,5 +56,13 @@ public class CCStaff {
 
     public void setStaff_pwd(String staff_pwd) {
         Staff_pwd = staff_pwd;
+    }
+
+    public String getNet_name() {
+        return Net_name;
+    }
+
+    public void setNet_name(String net_name) {
+        Net_name = net_name;
     }
 }

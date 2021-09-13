@@ -11,4 +11,7 @@ public interface ICouponManager {
     public void addCoupon(String context, String money, String start_date, String end_date,String Net_id) throws BaseException;
     public List<CCHoldCoupon> loadAllHold() throws BaseException;
     public void holdcoupon(CCCoupon coupon) throws BaseException;
+    public void delete(CCCoupon coupon) throws BaseException;
+    public void changecou(String coupon_id, String content, String money
+            ,String start,String end) throws BaseException;
 }

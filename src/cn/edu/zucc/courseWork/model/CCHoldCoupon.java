@@ -13,6 +13,7 @@ public class CCHoldCoupon {
     private int Net_id;
     private Date start_date;
     private Date end_date;
+    private String netname;
     public String getCell(int col) {
         if (col==0) return String.valueOf(hold_id);
 //        else if (col==1) return String.valueOf(user_id);
@@ -22,7 +23,7 @@ public class CCHoldCoupon {
         else if (col==4) return String.valueOf(money);
         else if (col==5) return String.valueOf(start_date);
         else if (col==6) return String.valueOf(end_date);
-        else if(col==7) return String.valueOf(Net_id);
+        else if(col==7) return netname;
         else return "";
     }
     public static final String[] tableTitles = {"序号","优惠券编号","领取时间","内容","减免金额","开始时间","结束时间","优惠网点"};
@@ -100,5 +101,13 @@ public class CCHoldCoupon {
 
     public void setEnd_date(Date end_date) {
         this.end_date = end_date;
+    }
+
+    public String getNetname() {
+        return netname;
+    }
+
+    public void setNetname(String netname) {
+        this.netname = netname;
     }
 }

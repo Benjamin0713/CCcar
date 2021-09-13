@@ -16,6 +16,7 @@ public class FrmMainStaff extends JFrame implements ActionListener {
     private JMenu menu_person=new JMenu("个人信息");
     private JMenu menu_coupon=new JMenu("优惠券");
     private JMenu menu_car=new JMenu("汽车管理");
+    private JMenu menu_static=new JMenu("限时促销");
     private JMenu menu_more = new JMenu("更多");
 
     private JMenuItem menuItem_Check = new JMenuItem("查看信息");
@@ -28,6 +29,8 @@ public class FrmMainStaff extends JFrame implements ActionListener {
     private JMenuItem menuItem_car = new JMenuItem("查看汽车信息");
 //    private JMenuItem menuItem_scrap = new JMenuItem("汽车报废");
     private JMenuItem menuItem_scrap_check = new JMenuItem("查看报废表");
+
+    private JMenuItem menuItem_procheck = new JMenuItem("查看信息");
     private JMenuItem menuItem_Cancel = new JMenuItem ("退出");
     //    private FrmLogin dlgLogin=null;
     private JPanel statusBar = new JPanel();
@@ -45,11 +48,14 @@ public class FrmMainStaff extends JFrame implements ActionListener {
 //        this.menu_coupon.add(menuItem_couponModify);this.menuItem_couponModify.addActionListener(this);
         this.menu_car.add(menuItem_car);this.menuItem_car.addActionListener(this);
 //        this.menu_car.add(menuItem_scrap);this.menuItem_scrap.addActionListener(this);
+
+        this.menu_static.add(menuItem_procheck);this.menuItem_procheck.addActionListener(this);
         this.menu_car.add(menuItem_scrap_check);this.menuItem_scrap_check.addActionListener(this);
         this.menu_more.add(menuItem_Cancel);this.menuItem_Cancel.addActionListener(this);
         menubar.add(menu_person);
         menubar.add(menu_coupon);
         menubar.add(menu_car);
+        menubar.add(menu_static);
         menubar.add(menu_more);
         this.setJMenuBar(menubar);
 
@@ -57,7 +63,7 @@ public class FrmMainStaff extends JFrame implements ActionListener {
         statusBar.setLayout(new FlowLayout(FlowLayout.LEFT));
         CCStaff staff = new CCStaff();
         staff = CCStaff.currentLoginStaff;
-        JLabel label=new JLabel("您好!"+staff.getStaff_name());//修改成   您好！+登陆用户名
+        JLabel label=new JLabel("您好!网点"+staff.getStaff_Net_id()+"的员工-"+staff.getStaff_name());//修改成   您好！+登陆用户名
         statusBar.add(label);
         this.getContentPane().add(statusBar,BorderLayout.SOUTH);
         this.addWindowListener(new WindowAdapter(){
@@ -80,6 +86,8 @@ public class FrmMainStaff extends JFrame implements ActionListener {
             new FrmScrapstaff().setVisible(true);
         }else if(e.getSource()==this.menuItem_scrap_check){
             new FrmScrapExcel().setVisible(true);
+        }else if(e.getSource()==this.menuItem_procheck){
+            new FrmStaffPro().setVisible(true);
         }
     }
 }

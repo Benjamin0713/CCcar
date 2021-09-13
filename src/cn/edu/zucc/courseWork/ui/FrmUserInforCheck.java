@@ -26,6 +26,7 @@ public class FrmUserInforCheck extends JFrame implements ActionListener {
 //    private JMenuItem menuItem_tell = new JMenuItem("修改手机号");
 //    private JMenuItem menuItem_email = new JMenuItem("修改绑定邮箱");
 //    private JMenuItem menuItem_city = new JMenuItem("修改所在城市");
+    private JMenuItem menuItem_change=new JMenuItem("修改个人信息");
     private JMenuItem  menuItem_Cancel = new JMenuItem ("退出");
 
 
@@ -66,6 +67,7 @@ public class FrmUserInforCheck extends JFrame implements ActionListener {
         this.validate();
         this.menu_Modify.add(menuItem_name);this.menuItem_name.addActionListener(this);
         this.menu_Modify.add(menuItem_pwd);this.menuItem_pwd.addActionListener(this);
+        this.menu_Modify.add(menuItem_change);this.menuItem_change.addActionListener(this);
 //        this.menu_Modify.add(menuItem_sex);this.menuItem_sex.addActionListener(this);
 //        this.menu_Modify.add(menuItem_tell);this.menuItem_tell.addActionListener(this);
 //        this.menu_Modify.add(menuItem_email);this.menuItem_email.addActionListener(this);
@@ -96,6 +98,9 @@ public class FrmUserInforCheck extends JFrame implements ActionListener {
             return;
         }else if(e.getSource()==this.menuItem_name){
             FrmModifyUsername dlg =new FrmModifyUsername(null, "修改用户名", true);
+            dlg.setVisible(true);
+        }else if(e.getSource()==this.menuItem_change){
+            FrmUserModifyInfor dlg=new FrmUserModifyInfor(null,"修改个人信息",true);
             dlg.setVisible(true);
         }
         this.reloadStaffTable();

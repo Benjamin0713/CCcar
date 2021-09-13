@@ -49,7 +49,7 @@ public class FrmNetCheck extends JFrame implements ActionListener {
 
     public FrmNetCheck(){
         this.setTitle("网点管理-管理员");
-        setSize(600, 480);// 设置窗体大小
+        setSize(800, 580);// 设置窗体大小
         double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
         double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
         this.setLocation((int) (width - this.getWidth()) / 2,
@@ -81,6 +81,21 @@ public class FrmNetCheck extends JFrame implements ActionListener {
             return;
         }else if(e.getSource()==this.menuItem_couponadd){
             FrmAddNet dlg =new FrmAddNet(null, "添加网点", true);
+            dlg.setVisible(true);
+        }else if(e.getSource()==this.menuItem_coupondelete){
+            int i = FrmNetCheck.this.dataTableNet.getSelectedRow();
+            if (i < 0) {
+                JOptionPane.showMessageDialog(null, "请选择网点", "错误", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            try {
+                CCcarUtil.netManager.delete(this.Netdata.get(i));
+            } catch (BaseException e1) {
+                JOptionPane.showMessageDialog(null, e1.getMessage(), "错误", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }else if(e.getSource()==this.menuItem_couponModify){
+            FrmModifyNet dlg=new FrmModifyNet(null,"修改网点",true);
             dlg.setVisible(true);
         }
         this.reloadCouponTable();

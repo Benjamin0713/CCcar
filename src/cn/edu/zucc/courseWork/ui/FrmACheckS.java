@@ -19,6 +19,7 @@ public class FrmACheckS extends JFrame implements ActionListener {
     private JMenu menu_cancel = new JMenu("退出该界面");
 
     private JMenuItem  menuItem_name=new JMenuItem("注销员工");
+    private JMenuItem menuItem_staff=new JMenuItem("添加员工");
     private JMenuItem  menuItem_Cancel = new JMenuItem ("退出");
 
     private JPanel statusBar = new JPanel();
@@ -50,7 +51,7 @@ public class FrmACheckS extends JFrame implements ActionListener {
 //        this.setExtendedState(Frame.MAXIMIZED_BOTH);
         this.setTitle("个人信息管理-员工");
 //        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// 默认关闭方式
-        setSize(480, 380);// 设置窗体大小
+        setSize(600, 600);// 设置窗体大小
 
         // 屏幕居中显示
 //        this.setSize(800, 600);
@@ -61,6 +62,7 @@ public class FrmACheckS extends JFrame implements ActionListener {
 
         this.validate();
         this.menu_Modify.add(menuItem_name);this.menuItem_name.addActionListener(this);
+        this.menu_Modify.add(menuItem_staff);this.menuItem_staff.addActionListener(this);
         this.menu_cancel.add(menuItem_Cancel);this.menuItem_Cancel.addActionListener(this);
         menubar.add(menu_Modify);
         menubar.add(menu_cancel);
@@ -83,6 +85,22 @@ public class FrmACheckS extends JFrame implements ActionListener {
         if (e.getSource() == this.menuItem_Cancel) {
             setVisible(false);
             return;
+        }else if(e.getSource()==this.menuItem_name){
+            int i = FrmACheckS.this.dataTableStaff.getSelectedRow();
+            if (i < 0) {
+                JOptionPane.showMessageDialog(null, "请选择员工", "错误", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            try {
+                CCcarUtil.staffManager.delete(this.staffdata.get(i));
+            } catch (BaseException e1) {
+                JOptionPane.showMessageDialog(null, e1.getMessage(), "错误", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }else if(e.getSource()==this.menuItem_staff){
+            FrmRegisterStaff dlg=new FrmRegisterStaff(null,"添加员工",true);
+            dlg.setVisible(true);
+
         }
         this.reloadStaffTable();
     }

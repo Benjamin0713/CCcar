@@ -20,7 +20,7 @@ public class FrmCarRentCheck extends JFrame implements ActionListener {
     private JMenu menu_cancel = new JMenu("退出该界面");
 
     private JMenuItem  menuItem_Cancel = new JMenuItem ("退出");
-    private Object tblCarTitle[]= CCCar.tableTitles;
+    private Object tblCarTitle[]= CCCar.CostTitles;
     private Object tblCarData[][];
     DefaultTableModel tabCarModel=new DefaultTableModel();
     private JTable dataTableCar=new JTable(tabCarModel);
@@ -33,15 +33,15 @@ public class FrmCarRentCheck extends JFrame implements ActionListener {
     List<CCOrder> Orderdata = null;
     private void reloadCarTable() {
         try {
-            Cardata = CCcarUtil.carManager.loadAll();
+            Cardata = CCcarUtil.carManager.loadrent();
         }catch (BaseException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
             return;
         }
-        tblCarData = new Object[Cardata.size()][CCCar.tableTitles.length];
+        tblCarData = new Object[Cardata.size()][CCCar.CostTitles.length];
         for(int i = 0;i < Cardata.size() ; i++)
-            for(int j = 0; j< CCCar.tableTitles.length; j++)
-                tblCarData[i][j] = Cardata.get(i).getCell(j);
+            for(int j = 0; j< CCCar.CostTitles.length; j++)
+                tblCarData[i][j] = Cardata.get(i).getOrder(j);
         tabCarModel.setDataVector(tblCarData, tblCarTitle);
         this.dataTableCar.validate();
         this.dataTableCar.repaint();

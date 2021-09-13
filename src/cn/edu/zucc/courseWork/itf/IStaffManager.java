@@ -15,4 +15,6 @@ public interface IStaffManager {
     public List<CCStaff> loadAllshop() throws BaseException;
     public void changeName(CCStaff staff, String oldName, String newName) throws BaseException;
     public List<CCStaff> loadAll() throws BaseException;
+    public void delete(CCStaff staff) throws BaseException;
+    public void changeNet(CCStaff staff, String oldNet, String newNet) throws BaseException;
 }

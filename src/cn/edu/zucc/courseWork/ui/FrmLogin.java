@@ -103,13 +103,18 @@ public class FrmLogin extends JDialog implements ActionListener {
             if(((JRadioButton)LoginPane.getComponent(0)).isSelected()){
                 FrmRegisterUser dlg=new FrmRegisterUser(this,"注册",true);
                 dlg.setVisible(true);
-            }else if(((JRadioButton)LoginPane.getComponent(1)).isSelected()){
-                FrmRegisterStaff dlg=new FrmRegisterStaff(this,"注册",true);
-                dlg.setVisible(true);
-            }else {
-                FrmRegisterAdmin dlg=new FrmRegisterAdmin(this,"注册",true);
-                dlg.setVisible(true);
+            }else{
+                JOptionPane.showMessageDialog(null, "无法注册", "错误",JOptionPane.ERROR_MESSAGE);
+                return;
             }
+//            else if(((JRadioButton)LoginPane.getComponent(1)).isSelected()){
+//                FrmRegisterStaff dlg=new FrmRegisterStaff(this,"注册",true);
+//                dlg.setVisible(true);
+//            }
+//            else {
+//                FrmRegisterAdmin dlg=new FrmRegisterAdmin(this,"注册",true);
+//                dlg.setVisible(true);
+//            }
         }
     }
 }
